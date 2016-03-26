@@ -22,7 +22,14 @@ public class Floor
 
     public void enter(Movable movable)
     {
-
+        if(element == null)
+        {
+            movable.setPosition(this);
+        }
+        else
+        {
+            element.interact(movable);
+        }
     }
 
     public void exit(Movable movable)
