@@ -1,4 +1,4 @@
-package minigreens;
+
 
 public class Player implements Movable
 {
@@ -7,9 +7,33 @@ public class Player implements Movable
     private int numofZPM;
     private Element element;
 
-    public Player(){}
-    public void die(){}
-    public void step(){}
+    public Player()
+    {
+        numofZPM = 0;
+        element = null;
+    }
+
+    public void die()
+    {
+
+    }
+
+    @Override
+    public void step()
+    {
+        Floor neighbour = position.getNeighbour(direction);
+        if(neighbour != null)
+        {
+            neighbour.enter(this);
+        }
+    }
+
+    @Override
+    public void setPosition(Floor floor)
+    {
+        position = floor;
+    }
+
     public void turn(TurnDirection dir)
     {
         switch(direction)

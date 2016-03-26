@@ -1,4 +1,3 @@
-package minigreens;
 
 public enum Direction
 {
