@@ -2,6 +2,6 @@ package minigreens;
 
 public interface Movable
 {
-    void Step();
-    void SetPosotion();
+    void step();
+    void setPosotion();
 }
