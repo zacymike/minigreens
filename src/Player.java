@@ -8,9 +8,9 @@ public class Player implements Movable
     private Element element;
 
     public Player(){}
-    public void Die(){}
-    public void Step(){}
-    public void Turn(TurnDirection dir){}
-    public void PickUp(){}
-    public void PutDown(){}
+    public void die(){}
+    public void step(){}
+    public void turn(TurnDirection dir){}
+    public void pickUp(){}
+    public void putDown(){}
 }
