@@ -1,5 +1,5 @@
 
-public class Box implements Element
+public class Zpm implements Element
 {
     @Override
     public void interact(Movable movable)
