@@ -32,4 +32,17 @@ public class Wall implements Element
             sg.interact(player);
         }
     }
+
+    @Override
+    public void interact(Bullet bullet)
+    {
+        if(isspecial)
+        {
+
+        }
+        else
+        {
+            bullet.destroy();
+        }
+    }
 }
