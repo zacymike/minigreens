@@ -1,6 +1,7 @@
 
 public class Scale implements Element
 {
+    private Door door;
 
     @Override
     public void interact(Movable movable)
@@ -11,7 +12,7 @@ public class Scale implements Element
     @Override
     public void interact(Player player)
     {
-
+        door.setState(true);
     }
 
     @Override

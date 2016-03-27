@@ -1,6 +1,10 @@
 
 public class Box implements Element
 {
+    private boolean alive;
+
+    Box() { alive = true; }
+
     @Override
     public void interact(Movable movable)
     {
@@ -17,5 +21,10 @@ public class Box implements Element
     public void interact(Bullet bullet)
     {
         bullet.destroy();
+    }
+
+    public void destroy()
+    {
+        alive = false;
     }
 }

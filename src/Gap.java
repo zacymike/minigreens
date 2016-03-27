@@ -7,26 +7,15 @@ public class Gap implements Element {
 
     @Override
     public void interact(Player player) {
-
+        player.die();
     }
 
     @Override
+    public void interact(Bullet bullet) {
+
+    }
+
     public void interact(Box box) {
-
-    }
-
-    @Override
-    public void pickedUp() {
-
-    }
-
-    @Override
-    public void SteppedOut(Player player) {
-
-    }
-
-    @Override
-    public void SteppedOut(Box box) {
-
+        box.destroy();
     }
 }

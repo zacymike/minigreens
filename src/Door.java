@@ -1,9 +1,11 @@
 
 public class Door implements Element {
-    private boolean state;
+    private boolean opened;
+
+    Door() { opened = false; }
 
     public void setState(boolean state) {
-        this.state = state;
+        this.opened = state;
     }
 
     @Override
@@ -17,22 +19,7 @@ public class Door implements Element {
     }
 
     @Override
-    public void interact(Box box) {
-
-    }
-
-    @Override
-    public void pickedUp() {
-
-    }
-
-    @Override
-    public void SteppedOut(Player player) {
-
-    }
-
-    @Override
-    public void SteppedOut(Box box) {
+    public void interact(Bullet bullet) {
 
     }
 }
