@@ -1,16 +1,11 @@
 
 public abstract class SG implements Element
 {
-    private Floor neighbour;
+    private Floor entry;
 
-    public void setNeighbour(Floor floor)
-    {
-        neighbour = floor;
-    }
+    public SG() { entry = null; }
 
-    public Floor getNeighbour()
-    {
-        return neighbour;
-    }
-  
+    public Floor getEntry() { return entry; }
+
+    public void setEntry(Floor floor) { entry = floor; }
 }

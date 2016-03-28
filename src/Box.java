@@ -29,6 +29,30 @@ public class Box implements Element
         Logger.exit(this.getClass(), "interact()", bullet.getClass());
     }
 
+    @Override
+    public void interact(Box box)
+    {
+
+    }
+
+    @Override
+    public void pickedUp()
+    {
+
+    }
+
+    @Override
+    public void steppedOut(Player player)
+    {
+
+    }
+
+    @Override
+    public void steppedOut(Box box)
+    {
+
+    }
+
     public void destroy()
     {
         Logger.enter(this.getClass(), "destroy()", null);

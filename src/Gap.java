@@ -7,25 +7,35 @@ public class Gap implements Element {
 
     @Override
     public void interact(Player player) {
-        Logger.enter(this.getClass(), "interact()", player.getClass());
-
         player.die();
-
-        Logger.exit(this.getClass(), "interact()", player.getClass());
     }
 
     @Override
-    public void interact(Bullet bullet) {
-        Logger.enter(this.getClass(), "interact()", bullet.getClass());
-
-        Logger.exit(this.getClass(), "interact()", bullet.getClass());
+    public void interact(Bullet bullet)
+    {
+        Floor gappos = bullet.getPosition().getNeighbour(bullet.getDirection());
+        bullet.setPosition(gappos);
     }
 
     public void interact(Box box) {
-        Logger.enter(this.getClass(), "interact()", box.getClass());
-
         box.destroy();
+    }
 
-        Logger.exit(this.getClass(), "interact()", box.getClass());
+    @Override
+    public void pickedUp()
+    {
+
+    }
+
+    @Override
+    public void steppedOut(Player player)
+    {
+
+    }
+
+    @Override
+    public void steppedOut(Box box)
+    {
+
     }
 }
