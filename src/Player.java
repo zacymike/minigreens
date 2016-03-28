@@ -48,8 +48,11 @@ public class Player implements Movable
                 break;
         }
     }
+
     public void pickUp(){}
+
     public void putDown(){}
+
     public Direction getDirection() { return direction; }
 
     @Override
