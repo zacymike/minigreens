@@ -16,36 +16,66 @@ public class Bullet implements Movable
     @Override
     public void step()
     {
+        Logger.enter(this.getClass(), "step()", null);
+
         Floor neighbour = position.getNeighbour(direction);
-        if(neighbour != null)
-        {
+        if(neighbour != null) {
             neighbour.enter(this);
-            if (alive)
+            if (alive) {
                 step();
-        }
-        else
-        {
+            }
+        } else {
             destroy();
         }
+
+        Logger.exit(this.getClass(), "step()", null);
     }
 
     @Override
     public void setPosition(Floor floor)
     {
+        Logger.enter(this.getClass(), "setPosition()", floor.getClass());
+
         position = floor;
+
+        Logger.exit(this.getClass(), "setPosition()", floor.getClass());
     }
 
-    public Floor getPosition() { return position; }
+    public Floor getPosition() {
+        Logger.enter(this.getClass(), "getPosition()", null);
+        Logger.exit(this.getClass(), "getPosition()", null);
 
-    public Direction getDirection() { return direction; }
+        return position;
+    }
 
-    public Type getType() { return type; }
+    public Direction getDirection() {
+        Logger.enter(this.getClass(), "getDirection()", null);
+        Logger.exit(this.getClass(), "getDirection()", null);
 
-    public void setType(Type type) { this.type = type; }
+        return direction;
+    }
 
-    public void destroy()
-    {
+    public Type getType() {
+        Logger.enter(this.getClass(), "getType()", null);
+        Logger.exit(this.getClass(), "getType()", null);
+
+        return type;
+    }
+
+    public void setType(Type type) {
+        Logger.enter(this.getClass(), "setType()", type.getClass());
+
+        this.type = type;
+
+        Logger.exit(this.getClass(), "setType()", type.getClass());
+    }
+
+    public void destroy() {
+        Logger.enter(this.getClass(), "destroy()", null);
+
         alive = false;
+
+        Logger.exit(this.getClass(), "destroy()", null);
     }
 
 }

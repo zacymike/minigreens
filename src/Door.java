@@ -4,12 +4,20 @@ public class Door implements Element {
 
     Door() { opened = false; }
 
-    public void setState(boolean state) {
-        Logger.enter(this.getClass(), "setState()", null);
+    public void open() {
+        Logger.enter(this.getClass(), "open()", null);
 
-        this.opened = state; // should have separated open-close methods
+        this.opened = true;
 
-        Logger.exit(this.getClass(), "setState()", null);
+        Logger.exit(this.getClass(), "open()", null);
+    }
+
+    public void close() {
+        Logger.enter(this.getClass(), "close()", null);
+
+        this.opened = false;
+
+        Logger.exit(this.getClass(), "close()", null);
     }
 
     @Override
@@ -22,10 +30,7 @@ public class Door implements Element {
         Logger.enter(this.getClass(), "interact()", player.getClass());
 
         if (opened) {
-            Direction dir = player.getDirection();
-            Floor pos = player.getPosition();
-            Floor newPos = pos.getNeighbour(dir);
-            player.setPosition(newPos);
+            player.setPosition(player.getPosition().getNeighbour(player.getDirection()));
         }
 
         Logger.exit(this.getClass(), "interact()", player.getClass());
@@ -36,13 +41,11 @@ public class Door implements Element {
     {
         Logger.enter(this.getClass(), "interact()", bullet.getClass());
 
-        if(opened)
-        {
-            Floor doorpos = bullet.getPosition().getNeighbour(bullet.getDirection());
-            bullet.setPosition(doorpos);
-        }
-        else
+        if (opened) {
+            bullet.setPosition(bullet.getPosition().getNeighbour(bullet.getDirection()));
+        } else {
             bullet.destroy();
+        }
 
         Logger.exit(this.getClass(), "interact()", bullet.getClass());
     }
@@ -50,24 +53,32 @@ public class Door implements Element {
     @Override
     public void interact(Box box)
     {
+        Logger.enter(this.getClass(), "interact()", box.getClass());
 
+        Logger.exit(this.getClass(), "interact()", box.getClass());
     }
 
     @Override
     public void pickedUp()
     {
+        Logger.enter(this.getClass(), "pickedUp()", null);
 
+        Logger.exit(this.getClass(), "pickedUp()", null);
     }
 
     @Override
     public void steppedOut(Player player)
     {
+        Logger.enter(this.getClass(), "steppedOut()", player.getClass());
 
+        Logger.exit(this.getClass(), "steppedOut()", player.getClass());
     }
 
     @Override
     public void steppedOut(Box box)
     {
+        Logger.enter(this.getClass(), "steppedOut()", box.getClass());
 
+        Logger.exit(this.getClass(), "steppedOut()", box.getClass());
     }
 }
