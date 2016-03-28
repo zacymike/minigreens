@@ -50,4 +50,10 @@ public class Player implements Movable
     }
     public void pickUp(){}
     public void putDown(){}
+
+    public void Shoot(Type type)
+    {
+        Bullet bullet = new Bullet(position, direction, type);
+        bullet.step();
+    }
 }
