@@ -43,8 +43,8 @@ public class Scale implements Element
     @Override
     public void steppedOut(Box box)
     {
-        Logger.enter(this.getClass(), "interact()", bullet.getClass());
+        Logger.enter(this.getClass(), "interact()", box.getClass());
 
-        Logger.exit(this.getClass(), "interact()", bullet.getClass());
+        Logger.exit(this.getClass(), "interact()", box.getClass());
     }
 }
