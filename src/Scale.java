@@ -12,12 +12,18 @@ public class Scale implements Element
     @Override
     public void interact(Player player)
     {
+        Logger.enter(this.getClass(), "interact()", player.getClass());
+
         door.setState(true);
+
+        Logger.exit(this.getClass(), "interact()", player.getClass());
     }
 
     @Override
     public void interact(Bullet bullet)
     {
+        Logger.enter(this.getClass(), "interact()", bullet.getClass());
 
+        Logger.exit(this.getClass(), "interact()", bullet.getClass());
     }
 }
