@@ -6,6 +6,13 @@ public class Bullet implements Movable
     private Type type;
     private boolean alive;
 
+    public Bullet(Floor pos, Direction dir, Type t)
+    {
+        position = pos;
+        direction = dir;
+        type = t;
+    }
+
     @Override
     public void step()
     {
@@ -27,6 +34,14 @@ public class Bullet implements Movable
     {
         position = floor;
     }
+
+    public Floor getPosition() { return position; }
+
+    public Direction getDirection() { return direction; }
+
+    public Type getType() { return type; }
+
+    public void setType(Type type) { this.type = type; }
 
     public void destroy()
     {

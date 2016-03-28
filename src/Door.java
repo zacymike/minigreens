@@ -32,9 +32,42 @@ public class Door implements Element {
     }
 
     @Override
-    public void interact(Bullet bullet) {
+    public void interact(Bullet bullet)
+    {
         Logger.enter(this.getClass(), "interact()", bullet.getClass());
 
+        if(opened)
+        {
+            Floor doorpos = bullet.getPosition().getNeighbour(bullet.getDirection());
+            bullet.setPosition(doorpos);
+        }
+        else
+            bullet.destroy();
+
         Logger.exit(this.getClass(), "interact()", bullet.getClass());
+    }
+
+    @Override
+    public void interact(Box box)
+    {
+
+    }
+
+    @Override
+    public void pickedUp()
+    {
+
+    }
+
+    @Override
+    public void steppedOut(Player player)
+    {
+
+    }
+
+    @Override
+    public void steppedOut(Box box)
+    {
+
     }
 }

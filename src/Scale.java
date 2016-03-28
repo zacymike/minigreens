@@ -20,10 +20,31 @@ public class Scale implements Element
     }
 
     @Override
-    public void interact(Bullet bullet)
-    {
-        Logger.enter(this.getClass(), "interact()", bullet.getClass());
+    public void interact(Bullet bullet) { bullet.destroy(); }
 
-        Logger.exit(this.getClass(), "interact()", bullet.getClass());
+    @Override
+    public void interact(Box box)
+    {
+
+    }
+
+    @Override
+    public void pickedUp()
+    {
+
+    }
+
+    @Override
+    public void steppedOut(Player player)
+    {
+
+    }
+
+    @Override
+    public void steppedOut(Box box)
+    {
+        Logger.enter(this.getClass(), "interact()", box.getClass());
+
+        Logger.exit(this.getClass(), "interact()", box.getClass());
     }
 }
