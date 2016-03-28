@@ -50,6 +50,12 @@ public class Player implements Movable
     }
     public void pickUp(){}
     public void putDown(){}
+    public Direction getDirection() { return direction; }
+
+    @Override
+    public Floor getPosition() {
+        return position;
+    }
 
     public void Shoot(Type type)
     {

@@ -15,7 +15,10 @@ public class Door implements Element {
 
     @Override
     public void interact(Player player) {
-
+        Direction dir = player.getDirection();
+        Floor pos = player.getPosition();
+        Floor newPos = pos.getNeighbour(dir);
+        player.setPosition(newPos);
     }
 
     @Override
