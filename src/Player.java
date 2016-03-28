@@ -48,12 +48,21 @@ public class Player implements Movable
                 break;
         }
     }
+
     public void pickUp(){}
+
     public void putDown(){}
+
     public Direction getDirection() { return direction; }
 
     @Override
     public Floor getPosition() {
         return position;
+    }
+
+    public void Shoot(Type type)
+    {
+        Bullet bullet = new Bullet(position, direction, type);
+        bullet.step();
     }
 }
