@@ -20,6 +20,13 @@ public class Door implements Element {
         Logger.exit(this.getClass(), "close()", null);
     }
 
+    public boolean isOpened() {
+        Logger.enter(this.getClass(), "isOpened()", null);
+        Logger.exit(this.getClass(), "isOpened()", null);
+
+        return opened;
+    }
+
     @Override
     public void interact(Movable movable) {
 
@@ -59,11 +66,11 @@ public class Door implements Element {
     }
 
     @Override
-    public void pickedUp()
+    public void pickedUp(Player player)
     {
-        Logger.enter(this.getClass(), "pickedUp()", null);
+        Logger.enter(this.getClass(), "pickedUp()", player.getClass());
 
-        Logger.exit(this.getClass(), "pickedUp()", null);
+        Logger.exit(this.getClass(), "pickedUp()", player.getClass());
     }
 
     @Override

@@ -14,7 +14,11 @@ public class Scale implements Element
     {
         Logger.enter(this.getClass(), "interact()", player.getClass());
 
-        door.open();
+        // ha van doboz a merlegen (nyitva az ajto), akkor az ezredes nem tud ralepni
+        if (!door.isOpened()) {
+            door.open();
+            player.setPosition(player.getPosition().getNeighbour(player.getDirection()));
+        }
 
         Logger.exit(this.getClass(), "interact()", player.getClass());
     }
@@ -40,11 +44,11 @@ public class Scale implements Element
     }
 
     @Override
-    public void pickedUp()
+    public void pickedUp(Player player)
     {
-        Logger.enter(this.getClass(), "pickedUp()", null);
+        Logger.enter(this.getClass(), "pickedUp()", player.getClass());
 
-        Logger.exit(this.getClass(), "pickedUp()", null);
+        Logger.exit(this.getClass(), "pickedUp()", player.getClass());
     }
 
     @Override

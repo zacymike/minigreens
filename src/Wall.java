@@ -100,11 +100,11 @@ public class Wall implements Element
     }
 
     @Override
-    public void pickedUp()
+    public void pickedUp(Player player)
     {
-        Logger.enter(this.getClass(), "pickedUp()", null);
+        Logger.enter(this.getClass(), "pickedUp()", player.getClass());
 
-        Logger.exit(this.getClass(), "pickedUp()", null);
+        Logger.exit(this.getClass(), "pickedUp()", player.getClass());
     }
 
     @Override

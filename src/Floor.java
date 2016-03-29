@@ -45,4 +45,12 @@ public class Floor
 
         Logger.exit(this.getClass(), "exit()", movable.getClass());
     }
+
+    public void setElement(Element element) {
+        Logger.enter(this.getClass(), "setBox()", (element != null) ? element.getClass() : null);
+
+        this.element = element;
+
+        Logger.exit(this.getClass(), "setBox()", (element != null) ? element.getClass() : null);
+    }
 }

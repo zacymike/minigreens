@@ -30,10 +30,12 @@ public class ZPM implements Element {
     }
 
     @Override
-    public void pickedUp() {
-        Logger.enter(this.getClass(), "pickedUp()", null);
+    public void pickedUp(Player player) {
+        Logger.enter(this.getClass(), "pickedUp()", player.getClass());
 
-        Logger.exit(this.getClass(), "pickedUp()", null);
+
+
+        Logger.exit(this.getClass(), "pickedUp()", player.getClass());
     }
 
     @Override

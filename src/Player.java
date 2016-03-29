@@ -5,12 +5,12 @@ public class Player implements Movable
     private Floor position;
     private Direction direction;
     private int numofZPM;
-    private Element element;
+    private Box box;
 
     public Player()
     {
         numofZPM = 0;
-        element = null;
+        box = null;
     }
 
     public void die()
@@ -18,6 +18,22 @@ public class Player implements Movable
         Logger.enter(this.getClass(), "die()", null);
 
         Logger.exit(this.getClass(), "die()", null);
+    }
+
+    public void setBox(Box box) {
+        Logger.enter(this.getClass(), "setBox()", box.getClass());
+
+        this.box = box;
+
+        Logger.exit(this.getClass(), "setBox()", box.getClass());
+    }
+
+    public void addZPM() {
+        Logger.enter(this.getClass(), "addZPM()", null);
+
+        numofZPM++;
+
+        Logger.exit(this.getClass(), "addZPM()", null);
     }
 
     @Override
@@ -64,11 +80,26 @@ public class Player implements Movable
     public void pickUp() {
         Logger.enter(this.getClass(), "pickUp()", null);
 
+        Element element = position.getNeighbour(direction).getElement();
+        if ( element != null ) {
+            element.pickedUp(this);
+        }
+
         Logger.exit(this.getClass(), "pickUp()", null);
     }
 
     public void putDown() {
         Logger.enter(this.getClass(), "putDown()", null);
+
+        // ha nincs nala semmi, nem csinal semmit
+        if (box != null) {
+            Element e = position.getNeighbour(direction).getElement();
+            if (e != null) {
+                e.interact(box);
+            } else {
+                position.getNeighbour(direction).setElement(box);
+            }
+        }
 
         Logger.exit(this.getClass(), "putDown()", null);
     }

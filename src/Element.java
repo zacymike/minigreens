@@ -5,7 +5,7 @@ public interface Element
     public void interact(Player player);
     public void interact(Bullet bullet);
     public void interact(Box box);
-    public void pickedUp();
+    public void pickedUp(Player player);
     public void steppedOut(Player player);
     public void steppedOut(Box box);
 
