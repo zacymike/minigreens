@@ -4,6 +4,7 @@ public final class Logger {
     private static StringBuilder sb;
 
     private static String createIndent() {
+        sb = new StringBuilder();
         for (int i = 0; i < indentLength; i++) {
             sb.append("\t");
         }
@@ -18,8 +19,8 @@ public final class Logger {
     }
 
     public static void exit(Class<?> receiver, String msg, Class<?> sender) {
+        indentLength--;
         String indent = createIndent();
         System.out.println(indent + receiver.getTypeName() + " <-- " + msg + " --- " + (sender != null ? sender.getTypeName() : ""));
-        indentLength--;
     }
 }

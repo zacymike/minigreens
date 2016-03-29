@@ -3,6 +3,11 @@ public class Scale implements Element
 {
     private Door door;
 
+    public Scale(Door door)
+    {
+        this.door = door;
+    }
+
     @Override
     public void interact(Movable movable)
     {

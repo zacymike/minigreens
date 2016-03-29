@@ -6,17 +6,21 @@ public class Player implements Movable
     private Direction direction;
     private int numofZPM;
     private Box box;
+    private boolean alive;
 
     public Player()
     {
         numofZPM = 0;
         box = null;
+        direction = Direction.NORTH;
+        position = null;
+        alive = true;
     }
 
     public void die()
     {
         Logger.enter(this.getClass(), "die()", null);
-
+        alive = false;
         Logger.exit(this.getClass(), "die()", null);
     }
 

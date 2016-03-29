@@ -15,8 +15,6 @@ public class Wall implements Element
         if(isspecial)
             this.sg = sg;
     }
-    
-    public void createSG(){}
 
     @Override
     public void interact(Movable movable)
@@ -43,7 +41,7 @@ public class Wall implements Element
         Logger.enter(this.getClass(), "interact()", bullet.getClass());
 
         if(isspecial) {
-            CreateSG(bullet);
+            createSG(bullet);
         }
         else {
             bullet.destroy();
@@ -52,7 +50,7 @@ public class Wall implements Element
         Logger.exit(this.getClass(), "interact()", bullet.getClass());
     }
 
-    private void CreateSG(Bullet bullet)
+    private void createSG(Bullet bullet)
     {
         Floor bulletpos = bullet.getPosition();
         SGYellow yellowsg = SGYellow.getInstance();
@@ -69,24 +67,26 @@ public class Wall implements Element
                 // Ha van más falon már kék SG akkor azt ki töröljük onnan
                 if (SGBlue.getInstance().getEntry() != null)
                 {
-
+                    SGBlue.getInstance().getWall().setSG(null);
                 }
 
                 // Létrehozunk ezen a falon egy kék SGt
                 sg = SGBlue.getInstance();
                 sg.setEntry(bulletpos);
+                sg.setWall(this);
 
                 break;
             case YELLOW:
                 // Ha van más falon már sárga SG akkor azt ki töröljük onnan
                 if (SGYellow.getInstance().getEntry() != null)
                 {
-
+                    SGBlue.getInstance().getWall().setSG(null);
                 }
 
                 // Létrehozunk ezen a falon egy kék SGt
                 sg = SGYellow.getInstance();
                 sg.setEntry(bulletpos);
+                sg.setWall(this);
                 break;
         }
     }

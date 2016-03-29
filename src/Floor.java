@@ -1,4 +1,7 @@
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Floor
 {
@@ -8,6 +11,7 @@ public class Floor
     public Floor()
     {
         element = null;
+        neighbours = new HashMap<Direction, Floor>();
     }
 
     public Floor getNeighbour(Direction direction)
@@ -18,6 +22,15 @@ public class Floor
         return neighbours.get(direction);
     }
 
+    public void setNeighbours(Direction dir, Floor floor)
+    {
+        Logger.enter(this.getClass(), "setNeighbour()", floor.getClass());
+
+        neighbours.put(dir, floor);
+
+        Logger.exit(this.getClass(), "setNeighbour()", floor.getClass());
+    }
+
     public Element getElement()
     {
         Logger.enter(this.getClass(), "getElement()", null);
@@ -26,17 +39,30 @@ public class Floor
         return element;
     }
 
-    public void enter(Movable movable)
+    public void enter(Player player)
     {
-        Logger.enter(this.getClass(), "enter()", movable.getClass());
+        Logger.enter(this.getClass(), "enter()", player.getClass());
 
         if(element == null) {
-            movable.setPosition(this);
+            player.setPosition(this);
         } else {
-            element.interact(movable);
+            element.interact(player);
         }
 
-        Logger.exit(this.getClass(), "enter()", movable.getClass());
+        Logger.exit(this.getClass(), "enter()", player.getClass());
+    }
+
+    public void enter(Bullet bullet)
+    {
+        Logger.enter(this.getClass(), "enter()", bullet.getClass());
+
+        if(element == null) {
+            bullet.setPosition(this);
+        } else {
+            element.interact(bullet);
+        }
+
+        Logger.exit(this.getClass(), "enter()", bullet.getClass());
     }
 
     public void exit(Movable movable)
@@ -47,10 +73,11 @@ public class Floor
     }
 
     public void setElement(Element element) {
-        Logger.enter(this.getClass(), "setBox()", (element != null) ? element.getClass() : null);
+        Logger.enter(this.getClass(), "setElement()", (element != null) ? element.getClass() : null);
 
         this.element = element;
 
-        Logger.exit(this.getClass(), "setBox()", (element != null) ? element.getClass() : null);
+        Logger.exit(this.getClass(), "setElement()", (element != null) ? element.getClass() : null);
     }
+
 }
