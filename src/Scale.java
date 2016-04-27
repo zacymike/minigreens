@@ -1,7 +1,11 @@
+import java.util.ArrayList;
 
 public class Scale implements Element
 {
     private Door door;
+    private int limit;
+    private int current_w;
+    private ArrayList<Weight> weights;
 
     public Scale(Door door)
     {
@@ -9,10 +13,7 @@ public class Scale implements Element
     }
 
     @Override
-    public void interact(Movable movable)
-    {
-
-    }
+    public void interact(Movable movable) {}
 
     @Override
     public void interact(Player player)
@@ -74,5 +75,29 @@ public class Scale implements Element
         door.close();
 
         Logger.exit(this.getClass(), "steppedOut()", box.getClass());
+    }
+
+    public void setDoor(Door door) {
+        this.door = door;
+    }
+
+    public Door getDoor() {
+        return door;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
+
+    public int getCurrent_w() {
+        return current_w;
+    }
+
+    public void addCurrentw(int s){
+        this.current_w += s;
     }
 }

@@ -1,5 +1,5 @@
 
 public enum Type
 {
-  BLUE, YELLOW
+  BLUE, YELLOW, RED, GREEN
 }

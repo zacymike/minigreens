@@ -1,310 +1,547 @@
-import java.io.BufferedReader;
+import java.io.*;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.File;
+import java.net.URL;
 
 public class Maze {
 
     private static boolean run = true;
+    private static Floor[][] maze;
 
-    public static void main(String[] args)
+    private enum ParsingState {
+        INITIAL,
+        ERROR,
+        ELEMENT,
+        ELEMENT_CLOSED,
+        ELEMENT_SPECIFIED,
+        SCALE_SPECIFIED,
+        DOOR_SPECIFIED,
+        COLONEL_SPECIFIED,
+        JAFFA_SPECIFIED,
+        BOX_SPECIFIED,
+        SPECIAL_WALL_SPECIFIED,
+        WEIGHTELEMENT_SPECIFIED,
+        FLOOR_ADDED
+    }
+
+    private static ParsingState state = ParsingState.INITIAL;
+    /**
+     * Ez a függvény a main függvény, innen indul a játék
+     */
+    public static void main(String[] args) throws IOException
     {
+        //ReadMaze("tesztek/setdirtest.txt");
+
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(isr);
-        int testnum = 0;
-        Player oneill;
-        Floor pos;
-        Floor neighbour;
-        Floor neighbour2;
-        SGBlue blue;
-        SGYellow yellow;
-        Wall wall1;
-        Wall wall2;
-        Scale scale;
-        Door door;
-        Gap gap;
-        Box box;
-        ZPM zpm;
+        String Str = "";
+        String[] darabok = {"","",""};
+        String[] palya = {"fg", "sd", "fg"};
 
+        System.out.println("Lehetseges parancsok:\n " +
+                "load filename\n " +
+                "print filename \n " +
+                "step mo \n " +
+                "setDir mo dir \n " +
+                "pickup mo \n " +
+                "setDir mo dir \n " +
+                "putdown mo \n " +
+                "shoot c \n " +
+                "show x y \n " +
+                "rep state \n " +
+                "hasBox mo \n " +
+                "collcectedZPM mo \n " +
+                "autoZPM state \n");
 
         while(run)
         {
-            System.out.println("Válassz test esetet: ");
+            System.out.println("Johetnek a parancsok: ");
 
             try
             {
-                testnum = Integer.parseInt(br.readLine());
+                Str = (br.readLine());
             }
             catch (IOException e)
             {
                 e.printStackTrace();
             }
 
-            clear();
+            int i = 0;
+            for (String retval: Str.split(" ")){
+                darabok[i] = retval;
+                i++;
+            }
 
-            switch (testnum)
+            String parancs = darabok[0];
+            String masodik = darabok[1];
+            String harmadik = darabok[2];
+
+            switch (parancs)
             {
-                // Fordulás
-                case 1:
-                    System.out.println("Fordulás:");
-                    oneill = new Player();
-                    oneill.turn(TurnDirection.LEFT);
+                /* load filename
+                * Leírás: A pályafájl beolvasására szolgáló parancs. A megadott fájlt egy helyre kell
+                * másolni az osztályfájlokkal, ebben a mappában fogja keresni a prototípus.
+                * Opciók: filename: a játéktér leírását tartalmazó txt fájl neve
+                * */
+                case "load":
+                    palya = ReadMaze("tesztek/"+masodik+".txt");
+                    parseMaze(palya);
+
                     break;
 
-                // Lépés üres mezőre
-                case 2:
-                    System.out.println("Lépés üres mezőre:");
-
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    oneill = new Player();
-
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.step();
+                /* print filename
+                 *  Leírás: A megadott fájlnévvel létrehoz egy fájlt, amibe kimenti a
+                 *  pálya pillanatnyiképét a 7.1.1-ben definiált pályaleíró nyelvet használva. Ha a megadott névvel már
+                 *  létezik txt fájl, akkor felül fogja írni azt.
+                 *  Opciók: filename: a txt fájl neve, amibe a játéktér állapotát menteni szeretnénk.
+                 *  */
+                case "print":
+                    if (masodik != null) {
+                        WriteMaze(masodik, palya);
+                    }
                     break;
 
-                // Lépés mérlegre
-                case 3:
-                    System.out.println("Lépés mérlegre:");
-
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    door = new Door();
-                    scale = new Scale(door);
-                    oneill = new Player();
-
-                    neighbour.setElement(scale);
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.step();
+                /* step mo
+                 * Leírás: Az mo helyén megadott movable objektumot lépteti az objektumban tárolt
+                 * pillanatnyi irányban lévő mezőre. Az mo lehetséges értékeinek
+                 * jelentése megegyezik a pályaleíró nyelvben definiált jelentéssel.
+                 * Opciók: mo = {o | j | r}
+                 * */
+                case "step":
                     break;
 
-                // Lépés csillagkapura
-                case 4:
-                    System.out.println("Lépés csillagkapura:");
-
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    neighbour2 = new Floor();
-                    oneill = new Player();
-                    wall1 = new Wall(true);
-                    wall2 = new Wall(true);
-                    blue = SGBlue.getInstance();
-                    yellow = SGYellow.getInstance();
-
-                    blue.setEntry(neighbour);
-                    yellow.setEntry(neighbour2);
-                    wall1.setSG(blue);
-                    wall2.setSG(yellow);
-                    neighbour.setElement(wall1);
-                    neighbour2.setElement(wall2);
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.step();
+                /* setDir mo dir
+                * Leírás: Az mo helyén megadott movable objektum irányát állítja a dir helyén megadottra.
+                * Az mo lehetséges értékeinek jelentése megegyezik a pályaleíró nyelvben definiált jelentéssel.
+                * A dir lehetséges értékeinél a fel és az f, a le és az l, a jobb és a j illetve a
+                * bal és a bjelentése páronként megegyezik.
+                * Opciók: mo = {o | j | r}, dir = {fel | le | jobb | bal | f | l | j | b}
+                * */
+                case "setDir":
                     break;
 
-                // Lépés szakadékba
-                case 5:
-                    System.out.println("Lépés szakadékba:");
-
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    gap = new Gap();
-                    oneill = new Player();
-
-                    neighbour.setElement(gap);
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.step();
+                /* pickup mo
+                * Leírás: Az mo helyén megadott movable objektum megpróbálja az
+                * irányában lévőmezőn található pályaelemet felvenni. Az mo lehetséges
+                * értékeinek jelentése megegyezik a pályaleíró nyelvben definiált jelentéssel.
+                * Előfordulhat, hogy az ezredes páros számú ZPM-et vett fel a parancs végrehajtása
+                * után. A specifikáció szerint ekkor egy új ZPM jön létre egy véletlenszerű helyen, ez
+                * alapból automatikusan megtörténik. Ezt a funkciót az autoZPM funkcióval lehet ki- és
+                * bekapcsolni (pontosabban lásd később). Az mo lehetséges értékeinek
+                * jelentése megegyezik a pályaleíró nyelvben definiált jelentéssel.
+                * Opciók: mo = {o | j }
+                 */
+                case "pickup":
                     break;
 
-                // Lépés falra
-                case 6:
-                    System.out.println("Lépés falra:");
-
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    oneill = new Player();
-                    wall1 = new Wall(false);
-
-                    neighbour.setElement(wall1);
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.step();
+                /* putdown mo
+                * Leírás: Az mo helyén megadott movable objektum megpróbálja az irányában lévő
+                * mezőre letenni a nála lévő pályaelemet, ami a specifikációnak megfelelően csak doboz lehet.
+                * Az mo lehetséges értékeinek jelentése megegyezik a pályaleíró nyelvben definiált
+                * jelentéssel.
+                * Opciók: mo = {o | j }
+                 */
+                case "putdown":
+                    System.out.println("putdown");
                     break;
 
-                // Lépés dobozra
-                case 7:
-                    System.out.println("Lépés dobozra:");
 
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    oneill = new Player();
-                    box = new Box();
-
-                    neighbour.setElement(box);
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.step();
+                case "shoot":
+                    System.out.println("shoot");
                     break;
 
-                // Lépés zpmre
-                case 8:
-                    System.out.println("Lépés zpmre:");
 
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    oneill = new Player();
-                    zpm = new ZPM();
-
-                    neighbour.setElement(zpm);
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.step();
+                case "show":
+                    System.out.println("show");
                     break;
 
-                // Lépés zárt ajtóra
-                case 9:
-                    System.out.println("Lépés zárt ajtóra:");
 
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    oneill = new Player();
-                    door = new Door();
-
-                    neighbour.setElement(door);
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.step();
+                case "rep":
+                    System.out.println("rep");
                     break;
-                // Lépés nyitott ajtóra
-                case 10:
-                    System.out.println("Lépés zárt ajtóra:");
 
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    oneill = new Player();
-                    door = new Door();
 
-                    door.open();
-                    neighbour.setElement(door);
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.step();
+                case "hasBox":
+                    System.out.println("hasBox");
                     break;
-                // Felvesz dobozt
-                case 11:
-                    System.out.println("Felvesz dobozt:");
 
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    oneill = new Player();
-                    box = new Box();
 
-                    neighbour.setElement(box);
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.pickUp();
+                case "collectedZPM":
+                    System.out.println("collectedZPM");
                     break;
-                // Felvesz zpmet
-                case 12:
-                    System.out.println("Felvesz zpmet:");
 
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    oneill = new Player();
-                    zpm = new ZPM();
 
-                    neighbour.setElement(zpm);
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.pickUp();
+                case "autoZPM":
+                    System.out.println("autoZPM");
                     break;
-                // Lerak dobozt üresmezőre
-                case 13:
-                    System.out.println("Lerak dobozt üres mezőre:");
 
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    oneill = new Player();
-                    box = new Box();
-
-                    oneill.setBox(box);
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.putDown();
-                    break;
-                // Lerak dobozt szakadékba
-                case 14:
-                    System.out.println("Lerak dobozt üres mezőre:");
-
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    oneill = new Player();
-                    gap = new Gap();
-                    box = new Box();
-
-                    oneill.setBox(box);
-                    neighbour.setElement(gap);
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.putDown();
-                    break;
-                // Lő speciális falra
-                case 15:
-                    System.out.println("Lövés speciális falra:");
-
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    oneill = new Player();
-                    wall1 = new Wall(true);
-
-                    neighbour.setElement(wall1);
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.shoot(Type.BLUE);
-                    break;
-                // Lő sima falra
-                case 16:
-                    System.out.println("Lövés sima falra:");
-
-                    pos = new Floor();
-                    neighbour = new Floor();
-                    oneill = new Player();
-                    wall1 = new Wall(false);
-
-                    neighbour.setElement(wall1);
-                    pos.setNeighbours(Direction.NORTH, neighbour);
-                    oneill.setPosition(pos);
-
-                    oneill.shoot(Type.BLUE);
-                    break;
-                // Kilépés
-                case 17:
-                    run = false;
-                    System.out.println("Exit");
-                    break;
                 default:
-                    System.out.println("Nincs ilyen számú menüpont");
+                    System.out.println("Sajnos ilyen parancs nincs");
                     break;
             }
         }
     }
 
+    private static void parseMaze(String[] palya) {
+        boolean hadJaffa = false;
+        boolean hadColonel = false;
+        boolean hadReplicator = false;
+        Box box = null;
+        Door door = null;
+        Wall specWall = null;
+        Scale scale = null;
+        maze = new Floor[palya.length][];
+        for( int i = 0; i < palya.length; i++) {
+            String line = palya[i];
+            state = ParsingState.INITIAL;
+            int countOfFloors = line.length() - line.replace(".", "").length();
+            maze[i] = new Floor[countOfFloors];
+            int indexOfFloor = 0;
+            int countOfEmbeddedElements = 0;
+            for ( int j = 0; j < line.length(); j++ ) {
+                char c = line.charAt(j);
+                System.out.print(c);
+                switch( state ) {
+                    case INITIAL:
+                        if (c == '.') {
+                            maze[i][indexOfFloor] = new Floor();
+                            state = ParsingState.FLOOR_ADDED;
+                        } else {
+                            System.out.println("hibas bemenet " + i + ":" + j);
+                            state = ParsingState.ERROR;
+                            break;
+                        }
+                        break;
+                    case FLOOR_ADDED:
+                        if (c == '.') {
+                            if (countOfEmbeddedElements == 0) {
+                                indexOfFloor++;
+                                maze[i][indexOfFloor] = new Floor();
+                                state = ParsingState.FLOOR_ADDED;
+                            } else {
+                                System.out.println("hibas bemenet " + i + ":" + j);
+                                state = ParsingState.ERROR;
+                                break;
+                            }
+                        } else if (c == '(') {
+                            state = ParsingState.ELEMENT;
+                            countOfEmbeddedElements++;
+                        } else {
+                            System.out.println("hibas bemenet " + i + ":" + j);
+                            state = ParsingState.ERROR;
+                            break;
+                        }
+                        break;
+                    case ELEMENT:
+                        if (c == 'o') {
+                            if (!hadColonel) {
+                                Colonel.getInstance().setPosition(maze[i][indexOfFloor]);
+                                state = ParsingState.COLONEL_SPECIFIED;
+                            } else {
+                                System.out.println("csak egy O'Neill lehet " + i + ":" + j);
+                                state = ParsingState.ERROR;
+                                break;
+                            }
+                        } else if (c == 'j') {
+                            if (!hadJaffa) {
+                                Jaffa.getInstance().setPosition(maze[i][indexOfFloor]);
+                                state = ParsingState.JAFFA_SPECIFIED;
+                            } else {
+                                System.out.println("csak egy Jaffa lehet " + i + ":" + j);
+                                state = ParsingState.ERROR;
+                                break;
+                            }
+                        } else if (c == 'b') {
+                            box = new Box();
+                            maze[i][indexOfFloor].setElement(box);
+                            state = ParsingState.BOX_SPECIFIED;
+                        } else if (c == 'd') {
+                            door = new Door();
+                            maze[i][indexOfFloor].setElement(door);
+                            state = ParsingState.DOOR_SPECIFIED;
+                        } else if (c == 's') {
+                            scale = new Scale(null);
+                            maze[i][indexOfFloor].setElement(scale);
+                            state = ParsingState.SCALE_SPECIFIED;
+                        } else if (c == 'g') {
+                            maze[i][indexOfFloor].setElement(new Gap());
+                            state = ParsingState.ELEMENT_SPECIFIED;
+                        } else if (c == 'z') {
+                            maze[i][indexOfFloor].setElement(new ZPM());
+                            state = ParsingState.ELEMENT_SPECIFIED;
+                        } else if (c == 'w') {
+                            maze[i][indexOfFloor].setElement(new Wall(false));
+                            state = ParsingState.ELEMENT_SPECIFIED;
+                        } else if (c == 'u') {
+                            j++;
+                            System.out.print(line.charAt(j));
+                            if (line.charAt(j) == 'b') {
+                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, Type.BLUE);
+                                Colonel.getInstance().addBullet(bullet);
+                                state = ParsingState.ELEMENT_SPECIFIED;
+                            } else if (line.charAt(j) == 'y') {
+                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, Type.YELLOW);
+                                Colonel.getInstance().addBullet(bullet);
+                                state = ParsingState.ELEMENT_SPECIFIED;
+                            } else if (line.charAt(j) == 'r') {
+                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, Type.RED);
+                                Jaffa.getInstance().addBullet(bullet);
+                                state = ParsingState.ELEMENT_SPECIFIED;
+                            } else if (line.charAt(j) == 'g') {
+                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, Type.GREEN);
+                                Jaffa.getInstance().addBullet(bullet);
+                                state = ParsingState.ELEMENT_SPECIFIED;
+                            } else {
+                                System.out.println("hibas bemenet " + i + ":" + j);
+                                state = ParsingState.ERROR;
+                                break;
+                            }
+                        } else if (c == 'x') {
+                            specWall = new Wall(true);
+                            maze[i][indexOfFloor].setElement(specWall);
+                            state = ParsingState.SPECIAL_WALL_SPECIFIED;
+                        } else if (c == 'r') {
+                            if (!hadReplicator) {
+                                Replicator.getInstance().setPosition(maze[i][indexOfFloor]);
+                                state = ParsingState.ELEMENT_SPECIFIED;
+                                hadReplicator = true;
+                            } else {
+                                System.out.println("csak egy replikator lehet " + i + ":" + j);
+                                state = ParsingState.ERROR;
+                                break;
+                            }
+                        } else {
+                            System.out.println("hibas bemenet " + i + ":" + j);
+                            state = ParsingState.ERROR;
+                            break;
+                        }
+                        break;
+                    case ELEMENT_CLOSED:
+                        if (countOfEmbeddedElements == 0) {
+                            if (c == '.') {
+                                indexOfFloor++;
+                                maze[i][indexOfFloor] = new Floor();
+                                state = ParsingState.FLOOR_ADDED;
+                            } else {
+                                System.out.println("hibas bemenet " + i + ":" + j);
+                                state = ParsingState.ERROR;
+                                break;
+                            }
+                        } else if (c == ',') {
+                            state = ParsingState.ELEMENT;
+                        } else if (c != ')') {
+                            System.out.println("hibas bemenet " + i + ":" + j);
+                            state = ParsingState.ERROR;
+                            break;
+                        }
+                        break;
+                    case COLONEL_SPECIFIED:
+                        if (c == '[') {
+                            for (j++; line.charAt(j) != ']'; j++) {
+                                c = line.charAt(j);
+                                System.out.print(c);
+                                Colonel.getInstance().setWeight(Colonel.getInstance().getWeight() * 10 + Character.getNumericValue(c));
+                            }
+                            hadColonel = true;
+                            System.out.print(line.charAt(j));
+                            state = ParsingState.WEIGHTELEMENT_SPECIFIED;
+                        } else {
+                            System.out.println("hibas bemenet " + i + ":" + j);
+                            state = ParsingState.ERROR;
+                            break;
+                        }
+                        break;
+                    case JAFFA_SPECIFIED:
+                        if (c == '[') {
+                            for (j++; line.charAt(j) != ']'; j++) {
+                                c = line.charAt(j);
+                                System.out.print(c);
+                                Colonel.getInstance().setWeight(Colonel.getInstance().getWeight() * 10 + Character.getNumericValue(c));
+                            }
+                            hadJaffa = true;
+                            System.out.print(line.charAt(j));
+                            state = ParsingState.WEIGHTELEMENT_SPECIFIED;
+                        } else {
+                            System.out.println("hibas bemenet " + i + ":" + j);
+                            state = ParsingState.ERROR;
+                            break;
+                        }
+                        break;
+                    case BOX_SPECIFIED:
+                        if (c == '[') {
+                            for (j++; line.charAt(j) != ']'; j++) {
+                                c = line.charAt(j);
+                                System.out.print(c);
+                                box.setWeight(box.getWeight() * 10 + Character.getNumericValue(c));
+                            }
+                            System.out.print(line.charAt(j));
+                            state = ParsingState.WEIGHTELEMENT_SPECIFIED;
+                        } else {
+                            System.out.println("hibas bemenet " + i + ":" + j);
+                            state = ParsingState.ERROR;
+                            break;
+                        }
+                        break;
+                    case DOOR_SPECIFIED:
+                        if (c == '[') {
+                            j++;
+                            c = line.charAt(j);
+                            System.out.print(line.charAt(j));
+                            if (c == 'X') {
+                                door.close();
+                            } else if (c == '_') {
+                                door.open();
+                            } else {
+                                System.out.println("hibas bemenet " + i + ":" + j);
+                                state = ParsingState.ERROR;
+                                break;
+                            }
+
+                            j++;
+                            c = line.charAt(j);
+                            System.out.print(line.charAt(j));
+                            if (c != ']') {
+                                System.out.println("hibas bemenet " + i + ":" + j);
+                                state = ParsingState.ERROR;
+                                break;
+                            }
+
+                            state = ParsingState.ELEMENT_SPECIFIED;
+                        } else {
+                            System.out.println("hibas bemenet " + i + ":" + j);
+                            state = ParsingState.ERROR;
+                            break;
+                        }
+                        break;
+                    case SCALE_SPECIFIED:
+                        if (c == '[') {
+                            for (j++; line.charAt(j) != ']'; j++) {
+                                c = line.charAt(j);
+                                System.out.print(c);
+                                scale.setLimit(scale.getLimit() * 10 + Character.getNumericValue(c));
+                            }
+                            System.out.print(line.charAt(j));
+                            state = ParsingState.WEIGHTELEMENT_SPECIFIED;
+                        } else {
+                            System.out.println("hibas bemenet " + i + ":" + j);
+                            state = ParsingState.ERROR;
+                            break;
+                        }
+                        break;
+                    case WEIGHTELEMENT_SPECIFIED:
+                        if (c == '(') {
+                            state = ParsingState.ELEMENT;
+                            countOfEmbeddedElements++;
+                        } else if (c == ')') {
+                            state = ParsingState.ELEMENT_CLOSED;
+                            countOfEmbeddedElements--;
+                        }
+                        break;
+                    case ELEMENT_SPECIFIED:
+                        if (c == ')') {
+                            state = ParsingState.ELEMENT_CLOSED;
+                            countOfEmbeddedElements--;
+                        } else {
+                            System.out.println("hibas bemenet " + i + ":" + j);
+                            state = ParsingState.ERROR;
+                            break;
+                        }
+                        break;
+                    case SPECIAL_WALL_SPECIFIED:
+                        if (c == '(') {
+                            j++;
+                            c = line.charAt(j);
+                            if (Character.isDigit(c)) {
+                                System.out.print(c);
+                                if (Character.getNumericValue(c) == 1) {
+                                    specWall.setSG(SGBlue.getInstance());
+                                } else if (Character.getNumericValue(c) == 2) {
+                                    specWall.setSG(SGYellow.getInstance());
+                                } else if (Character.getNumericValue(c) == 3) {
+                                    specWall.setSG(SGGreen.getInstance());
+                                } else if (Character.getNumericValue(c) == 4) {
+                                    specWall.setSG(SGRed.getInstance());
+                                } else {
+                                    System.out.println("hibas bemenet " + i + ":" + j);
+                                    state = ParsingState.ERROR;
+                                    break;
+                                }
+                                j++;
+                                c = line.charAt(j);
+                                if (c == ')') {
+                                    System.out.print(c);
+                                    state = ParsingState.ELEMENT_SPECIFIED;
+                                } else {
+                                    System.out.println("hibas bemenet " + i + ":" + j);
+                                    state = ParsingState.ERROR;
+                                    break;
+                                }
+                            } else {
+                                System.out.println("hibas bemenet " + i + ":" + j);
+                                state = ParsingState.ERROR;
+                                break;
+                            }
+                        } else if (c == ')') {
+                            state = ParsingState.ELEMENT_CLOSED;
+                            countOfEmbeddedElements--;
+                        } else {
+                            System.out.println("hibas bemenet " + i + ":" + j);
+                            state = ParsingState.ERROR;
+                            break;
+                        }
+                        break;
+                    case ERROR:
+                        return;
+                    default: return;
+                }
+            }
+            System.out.println("");
+        }
+    }
+
+    /**
+     * Ez a függvény a pálya/labirintus beolvasására való, a paraméterben megadott elérési útvonalban megadott filet olvassa ki,
+     * ez lesz a mi pályaleíró nyelvünkkel megadott pálya
+     * visszatérési értéke pedig string tömbben megadott pálya
+     */
+    public static String[] ReadMaze(String path) throws IOException {
+        URL url = Maze.class.getResource(path);
+        File file2 = new File(url.getPath());
+        String fname = file2.toString();
+
+        try {
+            FileData file = new FileData();
+            file.ReadFile(fname);
+            String[] aryLines = file.OpenFile();
+
+            int i;
+            for ( i=0; i < aryLines.length; i++ ) {
+                System.out.println(aryLines[i]) ;
+            }
+            System.out.println("");
+            return aryLines;
+        } catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Ez a függvény való a pálya változásainak elmentésére, egy új/vagy régi txt fileba menti el
+     */
+    public static void WriteMaze(String path, String[] ujpalya){
+        try {
+            WriteFile data = new WriteFile(path, true);
+            for(int i = 0; i < ujpalya.length; i++)
+                data.writeToFile(ujpalya[i]);
+        } catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Ez a függvény a képernyő/konzol törtlését végzi
+     */
     public static void clear()
     {
         try

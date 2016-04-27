@@ -1,5 +1,5 @@
 
-public class Box implements Element
+public class Box extends Weight implements Element
 {
     private boolean alive;
 

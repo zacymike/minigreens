@@ -12,8 +12,10 @@ public class Wall implements Element
 
     public void setSG(SG sg)
     {
-        if(isspecial)
+        if(isspecial) {
             this.sg = sg;
+            this.sg.setWall(this);
+        }
     }
 
     @Override
@@ -83,7 +85,7 @@ public class Wall implements Element
                     SGBlue.getInstance().getWall().setSG(null);
                 }
 
-                // Létrehozunk ezen a falon egy kék SGt
+                // Létrehozunk ezen a falon egy sarga SGt
                 sg = SGYellow.getInstance();
                 sg.setEntry(bulletpos);
                 sg.setWall(this);

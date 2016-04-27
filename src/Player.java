@@ -1,12 +1,13 @@
 
 
-public class Player implements Movable
+public class Player extends Weight implements Movable
 {
     private Floor position;
     private Direction direction;
     private int numofZPM;
     private Box box;
     private boolean alive;
+    private Bullet bullet;
 
     public Player()
     {
@@ -15,6 +16,8 @@ public class Player implements Movable
         direction = Direction.NORTH;
         position = null;
         alive = true;
+        weight = 0;
+        bullet = null;
     }
 
     public void die()
@@ -131,4 +134,7 @@ public class Player implements Movable
 
         Logger.exit(this.getClass(), "shoot()", type.getClass());
     }
+
+    // ez azert kell, hogy ha palyaleirobol le lehessen tarolni
+    public void addBullet(Bullet bullet) { this.bullet = bullet; }
 }

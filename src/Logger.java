@@ -13,14 +13,14 @@ public final class Logger {
     }
 
     public static void enter (Class<?> sender, String msg, Class<?> receiver) {
-        String indent = createIndent();
+       /* String indent = createIndent();
         System.out.println(indent + sender.getTypeName() + " --- " + msg + " --> " + (receiver != null ? receiver.getTypeName() : ""));
-        indentLength++;
+        indentLength++;*/
     }
 
     public static void exit(Class<?> receiver, String msg, Class<?> sender) {
-        indentLength--;
+        /*indentLength--;
         String indent = createIndent();
-        System.out.println(indent + receiver.getTypeName() + " <-- " + msg + " --- " + (sender != null ? sender.getTypeName() : ""));
+        System.out.println(indent + receiver.getTypeName() + " <-- " + msg + " --- " + (sender != null ? sender.getTypeName() : ""));*/
     }
 }
