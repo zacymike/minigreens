@@ -1,0 +1,3 @@
+load playershoottest.txt
+shoot b
+print playershoottest.txt

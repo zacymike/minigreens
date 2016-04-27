@@ -1,0 +1,8 @@
+load replicatorttopairedsgtest.txt
+rep off
+setDir r jobb
+step r
+print replicatorttopairedsgtest.txt
+
+
+

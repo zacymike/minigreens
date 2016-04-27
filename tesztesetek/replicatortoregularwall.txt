@@ -1,0 +1,6 @@
+load replicatortoregularwall.txt
+rep off
+step r
+print replicatortoregularwall.txt
+
+

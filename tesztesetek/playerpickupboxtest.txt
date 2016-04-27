@@ -1,0 +1,6 @@
+load playerpickupboxtest.txt
+pickup o
+step o 
+hasBox o
+print playerpickupboxtest.txt
+

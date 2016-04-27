@@ -1,0 +1,9 @@
+load replicatorhitboxtest.txt
+rep off
+setDir r jobb
+step r
+print replicatorhitboxtest.txt
+
+
+
+

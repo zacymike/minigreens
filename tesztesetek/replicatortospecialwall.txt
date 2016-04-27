@@ -1,0 +1,7 @@
+load replicatortospecialwall.txt
+rep off
+step r
+print replicatortospecialwall.txt
+
+
+

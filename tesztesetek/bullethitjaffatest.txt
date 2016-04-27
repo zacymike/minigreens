@@ -1,0 +1,5 @@
+load bullethitjaffatest.txt
+shoot b
+print bullethitjaffatest.txt
+
+

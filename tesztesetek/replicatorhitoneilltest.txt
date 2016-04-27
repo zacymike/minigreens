@@ -1,0 +1,9 @@
+load replicatorhitoneilltest.txt
+rep off
+setDir r jobb
+step r
+print replicatorhitoneilltest.txt
+
+
+
+

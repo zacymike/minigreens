@@ -1,0 +1,4 @@
+load bullettospecialwalltest.txt
+shoot b
+print bullettospecialwalltest.txt
+

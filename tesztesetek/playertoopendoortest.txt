@@ -1,0 +1,4 @@
+load playertoopendoortest.txt
+setDir o jobb
+step o
+print playertoopendoortest.txt

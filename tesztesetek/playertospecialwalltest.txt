@@ -1,0 +1,6 @@
+load playertospecialwalltest.txt
+setDir o jobb
+step o
+print playertospecialwalltest.txt
+
+

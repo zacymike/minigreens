@@ -1,0 +1,5 @@
+load playerstepempty.txt
+step o
+print playerstepempty.txt
+
+

@@ -1,0 +1,5 @@
+load replicatortoblankcelltest.txt
+rep off
+step r
+print replicatortoblankcelltest.txt
+

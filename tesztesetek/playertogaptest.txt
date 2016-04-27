@@ -1,0 +1,4 @@
+load playertogaptest.txt
+setDir o jobb
+step o
+print playertogaptest.txt

@@ -1,0 +1,5 @@
+load bullettoreplicatortest.txt
+rep off
+shoot b
+print bullettoreplicatortest.txt
+

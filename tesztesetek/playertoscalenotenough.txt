@@ -1,0 +1,5 @@
+load playertoscalenotenough.txt
+setDir o jobb
+step o
+print playertoscalenotenough.txt
+

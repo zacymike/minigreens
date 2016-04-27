@@ -1,0 +1,8 @@
+load replicatortoonlysgtest.txt
+rep off
+setDir r jobb
+step r
+print replicatortoonlysgtest.txt
+
+
+

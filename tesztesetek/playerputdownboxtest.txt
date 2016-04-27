@@ -1,0 +1,6 @@
+load playerputdownboxtest.txt
+hasBox o
+putdown o
+step o 
+hasBox o
+print playerputdownboxtest.txt

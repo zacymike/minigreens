@@ -1,0 +1,6 @@
+load playerpickupzpmtest.txt
+collectedZPM o
+pickup o
+step o 
+collectedZPM o
+print playerpickupzpmtest.txt

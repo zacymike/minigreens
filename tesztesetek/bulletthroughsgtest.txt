@@ -1,0 +1,4 @@
+load bulletthroughsgtest.txt
+shoot b
+print bulletthroughsgtest.txt
+

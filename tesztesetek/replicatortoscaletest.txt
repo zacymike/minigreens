@@ -1,0 +1,9 @@
+load replicatortoscaletest.txt
+rep off
+setDir r jobb
+step r
+print replicatortoscaletest.txt
+
+
+
+

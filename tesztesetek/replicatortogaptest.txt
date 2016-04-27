@@ -1,0 +1,5 @@
+load replicatortogaptest.txt
+rep off
+step r
+print replicatortogaptest.txt
+

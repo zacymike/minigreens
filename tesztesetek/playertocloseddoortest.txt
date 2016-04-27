@@ -1,0 +1,4 @@
+load playertocloseddoortest.txt
+setDir o jobb
+step o
+print playertocloseddoortest.txt

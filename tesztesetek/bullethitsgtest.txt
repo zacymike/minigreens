@@ -1,0 +1,4 @@
+load bullethitsgtest.txt
+shoot b
+print bullethitsgtest.txt
+

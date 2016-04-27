@@ -1,0 +1,6 @@
+load playertoregularwalltest.txt
+setDir o jobb
+step o
+print playertoregularwalltest.txt
+
+
