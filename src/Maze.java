@@ -1,7 +1,10 @@
+
 import java.io.*;
 import java.io.IOException;
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Maze {
 
@@ -97,7 +100,27 @@ public class Maze {
                  *  */
                 case "print":
                     if (masodik != null) {
-                        WriteMaze(masodik, palya);
+                        /**
+                         * 2D String tömb létrehozása a mazeből
+                         */
+                        String[][] map2d = createStringMap(maze);
+                        String[] ujpalya = new String[map2d.length];
+                        /**
+                         * 2D -> 1D String tömb alakítás
+                         */
+                        for(int row = 0; row < map2d.length; row++)
+                        {
+                            StringBuilder concrow = new StringBuilder("");
+                            for(int col = 0; col < map2d.length; col++)
+                            {
+                                concrow.append(map2d[row][col]);
+                            }
+                            ujpalya[row] = concrow.toString();
+                        }
+                        /**
+                         * A pálya kiírása
+                         */
+                        WriteMaze(masodik, ujpalya);
                     }
                     break;
 
@@ -537,6 +560,252 @@ public class Maze {
         } catch (IOException e){
             System.out.println(e.getMessage());
         }
+    }
+
+    public static String[][] createStringMap(Floor[][] maze)
+    {
+        int rows = maze.length;
+        int cols = maze[0].length;
+        String[][] outmap = new String[rows][cols];
+
+        boolean hasColonel = false;
+        boolean hasJaffa = false;
+        boolean hasReplicator = false;
+        boolean hasBulletColonel = false;
+        boolean hasBulletJaffa = false;
+
+        Map<String, String> symbols = new HashMap<String, String>();
+
+        Floor positionColonel = Colonel.getInstance().getPosition();
+        Floor positionJaffa = Jaffa.getInstance().getPosition();
+        Floor positionReplicator = Replicator.getInstance().getPosition();
+        Floor positionBulletColonel = null;
+        if(Colonel.getInstance().getBullet() != null)
+        {
+            positionBulletColonel = Colonel.getInstance().getBullet().getPosition();
+            hasBulletColonel = true;
+
+            String type ="";
+            switch (Colonel.getInstance().getBullet().getType())
+            {
+                case BLUE:
+                    type = "b";
+                    break;
+                case YELLOW:
+                    type = "y";
+                    break;
+                case RED:
+                    type = "r";
+                    break;
+                case GREEN:
+                    type = "g";
+                    break;
+            }
+
+            symbols.put("BulletColonel", String.format("(u%s)", type));
+        }
+        Floor positionBulletJaffa = null;
+        if(Jaffa.getInstance().getBullet() != null)
+        {
+            positionBulletJaffa = Jaffa.getInstance().getBullet().getPosition();
+            hasBulletJaffa = true;
+
+            String type ="";
+            switch (Jaffa.getInstance().getBullet().getType())
+            {
+                case BLUE:
+                    type = "b";
+                    break;
+                case YELLOW:
+                    type = "y";
+                    break;
+                case RED:
+                    type = "r";
+                    break;
+                case GREEN:
+                    type = "g";
+                    break;
+            }
+
+            symbols.put("BulletJaffa", String.format("(u%s)", type));
+        }
+
+
+
+        if (positionColonel != null)
+        {
+            hasColonel = true;
+            if(Colonel.getInstance().getBox() != null)
+                symbols.put("Colonel", String.format("(o[%d](b[%d]))", Colonel.getInstance().getWeight(), Colonel.getInstance().getBox().getWeight()));
+            else
+                symbols.put("Colonel", String.format("(o[%d])", Colonel.getInstance().getWeight()));
+        }
+        if (positionJaffa != null)
+        {
+            hasJaffa = true;
+            symbols.put("Jaffa", String.format("(j[%d])", Jaffa.getInstance().getWeight()));
+        }
+        if (positionReplicator != null)
+        {
+            hasReplicator = true;
+            symbols.put("Replicator", "(r)");
+        }
+
+        for(int i = 0; i < rows; i++)
+        {
+            for(int j = 0; j < cols; j++)
+            {
+                Element element = maze[i][j].getElement();
+
+                /**
+                 * Floor típusú objektum szimbólumának beírása
+                 */
+                if(element == null)
+                {
+                    if(hasColonel && positionColonel == maze[i][j])
+                        outmap[i][j] = symbols.get("Colonel");
+                    else if(hasJaffa && positionJaffa == maze[i][j])
+                        outmap[i][j] = symbols.get("Jaffa");
+                    else if(hasReplicator && positionReplicator == maze[i][j])
+                        outmap[i][j] = symbols.get("Replicator");
+                    else if(hasBulletColonel && positionBulletColonel == maze[i][j])
+                        outmap[i][j] = symbols.get("BulletColonel");
+                    else if(hasBulletJaffa && positionBulletJaffa == maze[i][j])
+                        outmap[i][j] = symbols.get("BulletJaffa");
+                    else
+                        outmap[i][j] = ".";
+                }
+                else
+                {
+                    /**
+                     * Ha van valmilyen Movable a flooron és egy element is
+                     */
+                    boolean hasmovable = false;
+                    StringBuilder out = new StringBuilder("(");
+                    if(hasColonel && positionColonel == maze[i][j])
+                    {
+                        out.append(symbols.get("Colonel"));
+                        out.append(",");
+                        hasmovable = true;
+                    }
+                    else if(hasJaffa && positionJaffa == maze[i][j])
+                    {
+                        out.append(symbols.get("Jaffa"));
+                        out.append(",");
+                        hasmovable = true;
+                    }
+                    else if(hasReplicator && positionReplicator == maze[i][j])
+                    {
+                        out.append(symbols.get("Replicator"));
+                        out.append(",");
+                        hasmovable = true;
+                    }
+                    else if(hasBulletColonel && positionBulletColonel == maze[i][j])
+                    {
+                        out.append(symbols.get("BulletColonel"));
+                        out.append(",");
+                        hasmovable = true;
+                    }
+                    else if(hasBulletJaffa && positionBulletJaffa == maze[i][j])
+                    {
+                        out.append(symbols.get("BulletJaffa"));
+                        out.append(",");
+                        hasmovable = true;
+                    }
+
+                    /**
+                     * Elementek konkatenálása
+                     */
+                    /**
+                     * Box típusú element szimbólumának és súlyának beírása
+                     */
+                    if (element instanceof Box)
+                    {
+                        int weight = ((Box) element).getWeight();
+                        out.append(String.format("b[%d])", weight));
+                    }
+                    /**
+                     * Door típusú element szimbólumának és állapotának beírása
+                     */
+                    else if (element instanceof Door)
+                    {
+                        boolean open = ((Door) element).isOpened();
+                        if(open)
+                        {
+                            out.append("d[_])");
+                        }
+                        else
+                        {
+                            out.append("d[X])");
+                        }
+                    }
+                    /**
+                     * Gap típusú element szimbólumának beírása
+                     */
+                    else if (element instanceof Gap)
+                    {
+                        out.append("g)");
+                    }
+                    /**
+                     * Scale típusú element szimbólumának és rajta lévő súlyok összegének beírása
+                     */
+                    else if (element instanceof Scale)
+                    {
+                        out.append(String.format("s[%d])", ((Scale) element).getCurrent_w()));
+                    }
+                    /**
+                     * Wall típusú element szimbólumának beírása
+                     */
+                    else if (element instanceof Wall)
+                    {
+                        if(((Wall) element).getIsSpecial())
+                        {
+                            /**
+                             * SG típusú element szimbólumának és típusának beírása
+                             */
+                            String type = "";
+                            switch (((Wall) element).getSG().getType())
+                            {
+                                case BLUE:
+                                    type = "(1)";
+                                    break;
+                                case YELLOW:
+                                    type = "(2)";
+                                    break;
+                                case RED:
+                                    type = "(4)";
+                                    break;
+                                case GREEN:
+                                    type = "(3)";
+                                    break;
+                            }
+                            out.append(String.format("x%s)", type));
+                        }
+                        else
+                        {
+                            out.append("x)");
+                        }
+                    }
+                    /**
+                     * ZPM típusú element szimbólumának beírása
+                     */
+                    else if (element instanceof ZPM)
+                    {
+                        out.append("z)");
+                    }
+
+                    /**
+                     * Ha volt Movable is az adott Flooron akkor lezáró ) a több objektumot összefogó zárójelhez
+                     */
+                    if(hasmovable)
+                        out.append(")");
+
+                    outmap[i][j] = out.toString();
+                }
+            }
+        }
+
+        return outmap;
     }
 
     /**
