@@ -10,12 +10,27 @@ public class Wall implements Element
         sg = null;
     }
 
+    public void setIsspecial(boolean isspecial)
+    {
+        this.isspecial = isspecial;
+    }
+
+    public boolean getIsSpecial()
+    {
+        return isspecial;
+    }
+
     public void setSG(SG sg)
     {
         if(isspecial) {
             this.sg = sg;
             this.sg.setWall(this);
         }
+    }
+
+    public SG getSG()
+    {
+        return sg;
     }
 
     @Override

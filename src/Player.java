@@ -35,6 +35,11 @@ public class Player extends Weight implements Movable
         Logger.exit(this.getClass(), "setBox()", box.getClass());
     }
 
+    public Box getBox()
+    {
+        return box;
+    }
+
     public void addZPM() {
         Logger.enter(this.getClass(), "addZPM()", null);
 
@@ -137,4 +142,14 @@ public class Player extends Weight implements Movable
 
     // ez azert kell, hogy ha palyaleirobol le lehessen tarolni
     public void addBullet(Bullet bullet) { this.bullet = bullet; }
+
+    public Bullet getBullet()
+    {
+        return bullet;
+    }
+
+    public void setBullet(Bullet bullet)
+    {
+        this.bullet = bullet;
+    }
 }

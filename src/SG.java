@@ -1,8 +1,9 @@
 
-public abstract class SG implements Element
+public class SG implements Element
 {
     private Floor entry;
     private Wall wall;
+    private Type type;
 
     public SG() { entry = null; }
 
@@ -29,5 +30,57 @@ public abstract class SG implements Element
     public void setWall(Wall wall)
     {
         this.wall = wall;
+    }
+
+    public Type getType()
+    {
+        return type;
+    }
+
+    public void setType(Type type)
+    {
+        this.type = type;
+    }
+
+    @Override
+    public void interact(Movable movable)
+    {
+
+    }
+
+    @Override
+    public void interact(Player player)
+    {
+
+    }
+
+    @Override
+    public void interact(Bullet bullet)
+    {
+
+    }
+
+    @Override
+    public void interact(Box box)
+    {
+
+    }
+
+    @Override
+    public void pickedUp(Player player)
+    {
+
+    }
+
+    @Override
+    public void steppedOut(Player player)
+    {
+
+    }
+
+    @Override
+    public void steppedOut(Box box)
+    {
+
     }
 }

@@ -100,4 +100,14 @@ public class Scale implements Element
     public void addCurrentw(int s){
         this.current_w += s;
     }
+
+    public Weight getWeight(int i)
+    {
+        return weights.get(i);
+    }
+
+    public void putWeight(Weight w)
+    {
+        weights.add(w);
+    }
 }
