@@ -267,50 +267,57 @@ public class Maze {
                 * Opciók: player = {o | j } type = {b | y | g | r}
                  */
                 case "shoot":
-                    Type type;
-                    if((type = parseType(harmadik)) != null)
+                    if(masodik != null || harmadik != null)
                     {
-                        switch (masodik)
+                        Type type;
+                        if ((type = parseType(harmadik)) != null)
                         {
-                            case "o":
-                                if (Colonel.getInstance().getPosition() != null)
-                                    Colonel.getInstance().shoot(type);
-                                else
-                                    System.out.println("Nincs Oneill a pályán");
-                                break;
-                            case "j":
-                                if (Jaffa.getInstance().getPosition() != null)
-                                    Jaffa.getInstance().shoot(type);
-                                else
-                                    System.out.println("Nincs Jaffa a pályán");
-                                break;
-                            default:
-                                System.out.println("Nincs ilyen player");
-                                break;
-                        }
+                            switch (masodik)
+                            {
+                                case "o":
+                                    if (Colonel.getInstance().getPosition() != null)
+                                        Colonel.getInstance().shoot(type);
+                                    else
+                                        System.out.println("Nincs Oneill a pályán");
+                                    break;
+                                case "j":
+                                    if (Jaffa.getInstance().getPosition() != null)
+                                        Jaffa.getInstance().shoot(type);
+                                    else
+                                        System.out.println("Nincs Jaffa a pályán");
+                                    break;
+                                default:
+                                    System.out.println("Nincs ilyen player");
+                                    break;
+                            }
+                        } else
+                            System.out.println("Nincs ilyen típusú lövedék!");
                     }
                     else
-                        System.out.println("Nincs ilyen típusú lövedék!");
+                        System.out.println("Hiányzó paraméter!");
                     break;
 
 
                 case "show":
-                    int height = maze.length;
-                    int width = maze[0].length;
-                    int x = Integer.parseInt(masodik)-1;
-                    int y = Integer.parseInt(harmadik)-1;
-                    if(x < width && x >= 0)
+                    if(masodik != null || harmadik != null)
                     {
-                        if (y < height && y >= 0)
+                        int height = maze.length;
+                        int width = maze[0].length;
+                        int x = Integer.parseInt(masodik) - 1;
+                        int y = Integer.parseInt(harmadik) - 1;
+                        if (x < width && x >= 0)
                         {
-                            String[][] map2d = createStringMap(maze);
-                            System.out.println(map2d[x][y]);
-                        }
-                        else
-                            System.out.println("y koordináta túl kicsi vagy túl nagy!");
+                            if (y < height && y >= 0)
+                            {
+                                String[][] map2d = createStringMap(maze);
+                                System.out.println(map2d[y][x]);
+                            } else
+                                System.out.println("y koordináta túl kicsi vagy túl nagy!");
+                        } else
+                            System.out.println("x koordináta túl kicsi vagy túl nagy!");
                     }
                     else
-                        System.out.println("x koordináta túl kicsi vagy túl nagy!");
+                     System.out.println("Hiányzó paraméter!");
                     break;
 
 
