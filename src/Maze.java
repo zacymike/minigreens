@@ -658,7 +658,7 @@ public class Maze {
                             for (j++; line.charAt(j) != ']'; j++) {
                                 c = line.charAt(j);
                                 System.out.print(c);
-                                Colonel.getInstance().setWeight(Colonel.getInstance().getWeight() * 10 + Character.getNumericValue(c));
+                                Jaffa.getInstance().setWeight(Jaffa.getInstance().getWeight() * 10 + Character.getNumericValue(c));
                             }
                             hadJaffa = true;
                             System.out.print(line.charAt(j));
@@ -855,10 +855,14 @@ public class Maze {
 
         Map<String, String> symbols = new HashMap<String, String>();
 
+        /**
+         * Movable objektumok pozíciójának lekérdezése
+         */
         Floor positionColonel = Colonel.getInstance().getPosition();
         Floor positionJaffa = Jaffa.getInstance().getPosition();
         Floor positionReplicator = Replicator.getInstance().getPosition();
         Floor positionBulletColonel = null;
+
         if(Colonel.getInstance().getBullet() != null)
         {
             positionBulletColonel = Colonel.getInstance().getBullet().getPosition();
@@ -910,7 +914,9 @@ public class Maze {
         }
 
 
-
+        /**
+         * Szimbólumok beállítása a movable objektumokhoz
+         */
         if (positionColonel != null)
         {
             hasColonel = true;
