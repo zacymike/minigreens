@@ -4,6 +4,7 @@
 public class Replicator implements Movable {
     private Floor position;
     private Direction direction;
+    private boolean isauto;
 
     private static Replicator replicator;
 
@@ -26,4 +27,24 @@ public class Replicator implements Movable {
     }
 
     public void die(){}
+
+    public Direction getDirection()
+    {
+        return direction;
+    }
+
+    public void setDirection(Direction direction)
+    {
+        this.direction = direction;
+    }
+
+    public boolean isauto()
+    {
+        return isauto;
+    }
+
+    public void setIsauto(boolean isauto)
+    {
+        this.isauto = isauto;
+    }
 }

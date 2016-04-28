@@ -131,6 +131,31 @@ public class Maze {
                  * Opciók: mo = {o | j | r}
                  * */
                 case "step":
+                    switch (masodik)
+                    {
+                        case "o":
+                            if(Colonel.getInstance().getPosition() != null)
+                                Colonel.getInstance().step();
+                            else
+                                System.out.println("Nincs Oneill a pályán");
+                            break;
+                        case "j":
+                            if(Jaffa.getInstance().getPosition() != null)
+                                Jaffa.getInstance().step();
+                            else
+                                System.out.println("Nincs Jaffa a pályán");
+                            break;
+                        case "r":
+                            if(Replicator.getInstance().getPosition() != null)
+                                Replicator.getInstance().step();
+                            else
+                                System.out.println("Nincs replicator a pályán");
+                            break;
+                        default:
+                            System.out.println("Nincs ilyen movable");
+                            break;
+
+                    }
                     break;
 
                 /* setDir mo dir
@@ -141,6 +166,36 @@ public class Maze {
                 * Opciók: mo = {o | j | r}, dir = {fel | le | jobb | bal | f | l | j | b}
                 * */
                 case "setDir":
+                    Direction dir;
+                    if((dir = parseDirection(harmadik)) != null)
+                    {
+                        switch (masodik)
+                        {
+                            case "o":
+                                if (Colonel.getInstance().getPosition() != null)
+                                    Colonel.getInstance().setDirection(dir);
+                                else
+                                    System.out.println("Nincs Oneill a pályán");
+                                break;
+                            case "j":
+                                if (Jaffa.getInstance().getPosition() != null)
+                                    Jaffa.getInstance().setDirection(dir);
+                                else
+                                    System.out.println("Nincs Jaffa a pályán");
+                                break;
+                            case "r":
+                                if (Replicator.getInstance().getPosition() != null)
+                                    Replicator.getInstance().setDirection(dir);
+                                else
+                                    System.out.println("Nincs replicator a pályán");
+                                break;
+                            default:
+                                System.out.println("Nincs ilyen movable");
+                                break;
+                        }
+                    }
+                    else
+                        System.out.println("Nincs ilyen irány!");
                     break;
 
                 /* pickup mo
@@ -155,6 +210,24 @@ public class Maze {
                 * Opciók: mo = {o | j }
                  */
                 case "pickup":
+                    switch (masodik)
+                    {
+                        case "o":
+                            if (Colonel.getInstance().getPosition() != null)
+                                Colonel.getInstance().pickUp();
+                            else
+                                System.out.println("Nincs Oneill a pályán");
+                            break;
+                        case "j":
+                            if (Jaffa.getInstance().getPosition() != null)
+                                Jaffa.getInstance().pickUp();
+                            else
+                                System.out.println("Nincs Jaffa a pályán");
+                            break;
+                        default:
+                            System.out.println("Nincs ilyen player");
+                            break;
+                    }
                     break;
 
                 /* putdown mo
@@ -165,32 +238,157 @@ public class Maze {
                 * Opciók: mo = {o | j }
                  */
                 case "putdown":
+                    switch (masodik)
+                    {
+                        case "o":
+                            if (Colonel.getInstance().getPosition() != null)
+                                Colonel.getInstance().putDown();
+                            else
+                                System.out.println("Nincs Oneill a pályán");
+                            break;
+                        case "j":
+                            if (Jaffa.getInstance().getPosition() != null)
+                                Jaffa.getInstance().putDown();
+                            else
+                                System.out.println("Nincs Jaffa a pályán");
+                            break;
+                        default:
+                            System.out.println("Nincs ilyen player");
+                            break;
+                    }
                     System.out.println("putdown");
                     break;
 
-
+                /* shoot player type
+                * Leírás: Az mo helyén megadott movable objektum megpróbálja az irányában lévő
+                * mezőre letenni a nála lévő pályaelemet, ami a specifikációnak megfelelően csak doboz lehet.
+                * Az mo lehetséges értékeinek jelentése megegyezik a pályaleíró nyelvben definiált
+                * jelentéssel.
+                * Opciók: player = {o | j } type = {b | y | g | r}
+                 */
                 case "shoot":
-                    System.out.println("shoot");
+                    Type type;
+                    if((type = parseType(harmadik)) != null)
+                    {
+                        switch (masodik)
+                        {
+                            case "o":
+                                if (Colonel.getInstance().getPosition() != null)
+                                    Colonel.getInstance().shoot(type);
+                                else
+                                    System.out.println("Nincs Oneill a pályán");
+                                break;
+                            case "j":
+                                if (Jaffa.getInstance().getPosition() != null)
+                                    Jaffa.getInstance().shoot(type);
+                                else
+                                    System.out.println("Nincs Jaffa a pályán");
+                                break;
+                            default:
+                                System.out.println("Nincs ilyen player");
+                                break;
+                        }
+                    }
+                    else
+                        System.out.println("Nincs ilyen típusú lövedék!");
                     break;
 
 
                 case "show":
-                    System.out.println("show");
+                    int height = maze.length;
+                    int width = maze[0].length;
+                    int x = Integer.parseInt(masodik)-1;
+                    int y = Integer.parseInt(harmadik)-1;
+                    if(x < width && x >= 0)
+                    {
+                        if (y < height && y >= 0)
+                        {
+                            String[][] map2d = createStringMap(maze);
+                            System.out.println(map2d[x][y]);
+                        }
+                        else
+                            System.out.println("y koordináta túl kicsi vagy túl nagy!");
+                    }
+                    else
+                        System.out.println("x koordináta túl kicsi vagy túl nagy!");
                     break;
 
 
                 case "rep":
-                    System.out.println("rep");
+                    if(Replicator.getInstance().getPosition() != null)
+                    {
+                        switch (masodik)
+                        {
+                            case "on":
+                                Replicator.getInstance().setIsauto(true);
+                                break;
+                            case "off":
+                                Replicator.getInstance().setIsauto(false);
+                                break;
+                            default:
+                                System.out.println("Nincs ilyen paraméter!");
+                                break;
+                        }
+                    }
+                    else
+                        System.out.println("Nincs replicator a pályán");
                     break;
 
 
                 case "hasBox":
-                    System.out.println("hasBox");
+                    switch (masodik)
+                    {
+                        case "o":
+                            if (Colonel.getInstance().getPosition() != null)
+                            {
+                                if (Colonel.getInstance().getBox() != null)
+                                    System.out.println("true");
+                                else
+                                    System.out.println("false");
+                            }
+                            else
+                                System.out.println("Nincs Oneill a pályán");
+                            break;
+                        case "j":
+                            if (Jaffa.getInstance().getPosition() != null)
+                            {
+                                if(Jaffa.getInstance().getBox() != null)
+                                    System.out.println("true");
+                                else
+                                    System.out.println("false");
+                            }
+                            else
+                                System.out.println("Nincs Jaffa a pályán");
+                            break;
+                        default:
+                            System.out.println("Nincs ilyen player");
+                            break;
+                    }
                     break;
 
 
                 case "collectedZPM":
-                    System.out.println("collectedZPM");
+                    int o = 0;
+                    int j = 0;
+                    switch (masodik)
+                    {
+                        case "o":
+                            if (Colonel.getInstance().getPosition() != null)
+                                o += Colonel.getInstance().getNumofZPM();
+                            else
+                                System.out.println("Nincs Oneill a pályán");
+                            break;
+                        case "j":
+                            if (Jaffa.getInstance().getPosition() != null)
+                                j += Jaffa.getInstance().getNumofZPM();
+                            else
+                                System.out.println("Nincs Jaffa a pályán");
+                            break;
+                        default:
+                            System.out.println("Nincs ilyen player");
+                            break;
+                    }
+                    System.out.println(String.format("%d/%d", o, j));
                     break;
 
 
@@ -203,6 +401,67 @@ public class Maze {
                     break;
             }
         }
+    }
+
+    private  static  Direction parseDirection(String strdir)
+    {
+        Direction dir;
+        switch (strdir)
+        {
+            case "fel":
+                dir =  Direction.NORTH;
+                break;
+            case "le":
+                dir =  Direction.SOUTH;
+                break;
+            case "jobb":
+                dir =  Direction.EAST;
+                break;
+            case "bal":
+                dir =  Direction.WEST;
+                break;
+            case "f":
+                dir =  Direction.NORTH;
+                break;
+            case "l":
+                dir =  Direction.SOUTH;
+                break;
+            case "j":
+                dir =  Direction.EAST;
+                break;
+            case "b":
+                dir =  Direction.WEST;
+                break;
+            default:
+                dir =  null;
+                break;
+        }
+
+        return dir;
+    }
+    private  static  Type parseType(String strtype)
+    {
+        Type type;
+        switch (strtype)
+        {
+            case "b":
+                type =  Type.BLUE;
+                break;
+            case "y":
+                type =  Type.YELLOW;
+                break;
+            case "g":
+                type =  Type.GREEN;
+                break;
+            case "r":
+                type =  Type.RED;
+                break;
+            default:
+                type =  null;
+                break;
+        }
+
+        return type;
     }
 
     private static void parseMaze(String[] palya) {

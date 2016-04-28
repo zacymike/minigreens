@@ -123,6 +123,11 @@ public class Player extends Weight implements Movable
         return direction;
     }
 
+    public void setDirection(Direction dir)
+    {
+        direction = dir;
+    }
+
     @Override
     public Floor getPosition() {
         Logger.enter(this.getClass(), "getPosition()", null);
@@ -151,5 +156,10 @@ public class Player extends Weight implements Movable
     public void setBullet(Bullet bullet)
     {
         this.bullet = bullet;
+    }
+
+    public int getNumofZPM()
+    {
+        return numofZPM;
     }
 }
