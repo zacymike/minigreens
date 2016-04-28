@@ -87,7 +87,12 @@ public class Maze {
                 * Opciók: filename: a játéktér leírását tartalmazó txt fájl neve
                 * */
                 case "load":
+
+                    Colonel.getInstance().reset();
+                    Jaffa.getInstance().reset();
+
                     palya = ReadMaze("tesztek/"+masodik+".txt");
+
                     parseMaze(palya);
                     for(int row = 0; row < maze.length; row++)
                     {
@@ -414,6 +419,9 @@ public class Maze {
 
                 case "autoZPM":
                     System.out.println("autoZPM");
+                    break;
+                case "getweight":
+                    System.out.println(String.format("%d",Colonel.getInstance().getWeight()));
                     break;
 
                 default:

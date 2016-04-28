@@ -8,4 +8,9 @@ public class Jaffa extends Player {
         if ( jaffa == null ) jaffa = new Jaffa();
         return jaffa;
     }
+
+    public void reset()
+    {
+        jaffa = null;
+    }
 }

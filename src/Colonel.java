@@ -9,5 +9,10 @@ public class Colonel extends Player {
         return colonel;
     }
 
+    public void reset()
+    {
+        colonel = null;
+    }
+
     public void NewZPM(){}
 }
