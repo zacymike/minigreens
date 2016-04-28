@@ -111,7 +111,7 @@ public class Maze {
                         for(int row = 0; row < map2d.length; row++)
                         {
                             StringBuilder concrow = new StringBuilder("");
-                            for(int col = 0; col < map2d.length; col++)
+                            for(int col = 0; col < map2d[0].length; col++)
                             {
                                 concrow.append(map2d[row][col]);
                             }
@@ -656,24 +656,21 @@ public class Maze {
             for(int j = 0; j < cols; j++)
             {
                 Element element = maze[i][j].getElement();
+                StringBuilder out = new StringBuilder("");
+                out.append(".");
 
-                /**
-                 * Floor típusú objektum szimbólumának beírása
-                 */
                 if(element == null)
                 {
                     if(hasColonel && positionColonel == maze[i][j])
-                        outmap[i][j] = symbols.get("Colonel");
+                        out.append(symbols.get("Colonel"));
                     else if(hasJaffa && positionJaffa == maze[i][j])
-                        outmap[i][j] = symbols.get("Jaffa");
+                        out.append(symbols.get("Jaffa"));
                     else if(hasReplicator && positionReplicator == maze[i][j])
-                        outmap[i][j] = symbols.get("Replicator");
+                        out.append(symbols.get("Replicator"));
                     else if(hasBulletColonel && positionBulletColonel == maze[i][j])
-                        outmap[i][j] = symbols.get("BulletColonel");
+                        out.append(symbols.get("BulletColonel"));
                     else if(hasBulletJaffa && positionBulletJaffa == maze[i][j])
-                        outmap[i][j] = symbols.get("BulletJaffa");
-                    else
-                        outmap[i][j] = ".";
+                        out.append(symbols.get("BulletJaffa"));
                 }
                 else
                 {
@@ -681,7 +678,7 @@ public class Maze {
                      * Ha van valmilyen Movable a flooron és egy element is
                      */
                     boolean hasmovable = false;
-                    StringBuilder out = new StringBuilder("(");
+                    out.append("(");
                     if(hasColonel && positionColonel == maze[i][j])
                     {
                         out.append(symbols.get("Colonel"));
@@ -763,27 +760,32 @@ public class Maze {
                             /**
                              * SG típusú element szimbólumának és típusának beírása
                              */
-                            String type = "";
-                            switch (((Wall) element).getSG().getType())
+                            if(((Wall)element).getSG() != null)
                             {
-                                case BLUE:
-                                    type = "(1)";
-                                    break;
-                                case YELLOW:
-                                    type = "(2)";
-                                    break;
-                                case RED:
-                                    type = "(4)";
-                                    break;
-                                case GREEN:
-                                    type = "(3)";
-                                    break;
+                                String type = "";
+                                switch (((Wall) element).getSG().getType())
+                                {
+                                    case BLUE:
+                                        type = "(1)";
+                                        break;
+                                    case YELLOW:
+                                        type = "(2)";
+                                        break;
+                                    case RED:
+                                        type = "(4)";
+                                        break;
+                                    case GREEN:
+                                        type = "(3)";
+                                        break;
+                                }
+                                out.append(String.format("x%s)", type));
                             }
-                            out.append(String.format("x%s)", type));
+                            else
+                                out.append("x)");
                         }
                         else
                         {
-                            out.append("x)");
+                            out.append("w)");
                         }
                     }
                     /**
@@ -800,8 +802,9 @@ public class Maze {
                     if(hasmovable)
                         out.append(")");
 
-                    outmap[i][j] = out.toString();
+
                 }
+                outmap[i][j] = out.toString();
             }
         }
 
