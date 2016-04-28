@@ -89,7 +89,20 @@ public class Maze {
                 case "load":
                     palya = ReadMaze("tesztek/"+masodik+".txt");
                     parseMaze(palya);
-
+                    for(int row = 0; row < maze.length; row++)
+                    {
+                        for (int col = 0; col < maze[0].length; col++)
+                        {
+                            if(row-1 >= 0)
+                                maze[row][col].setNeighbours(Direction.NORTH, maze[row-1][col]);
+                            if(row+1 < maze.length)
+                                maze[row][col].setNeighbours(Direction.SOUTH, maze[row+1][col]);
+                            if(col+1 < maze[0].length)
+                                maze[row][col].setNeighbours(Direction.EAST, maze[row][col+1]);
+                            if(col-1 >= 0)
+                            maze[row][col].setNeighbours(Direction.WEST, maze[row][col-1]);
+                        }
+                    }
                     break;
 
                 /* print filename
