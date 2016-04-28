@@ -24,6 +24,7 @@ public class Player extends Weight implements Movable
     {
         Logger.enter(this.getClass(), "die()", null);
         alive = false;
+        position = null;
         Logger.exit(this.getClass(), "die()", null);
     }
 
