@@ -18,6 +18,8 @@ public abstract class Player extends Weight implements Movable
         alive = true;
         weight = 0;
         bullet = null;
+
+        addObserver(Renderer.getInstance());
     }
 
     public void die()
@@ -68,6 +70,7 @@ public abstract class Player extends Weight implements Movable
         Logger.enter(this.getClass(), "setPosition()", floor.getClass());
 
         position = floor;
+        notifyObservers();
 
         Logger.exit(this.getClass(), "setPosition()", floor.getClass());
     }

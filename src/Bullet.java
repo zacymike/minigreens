@@ -1,5 +1,6 @@
+import java.util.Observable;
 
-public class Bullet implements Movable
+public class Bullet extends Observable implements Movable
 {
     private Floor position;
     private Direction direction;
@@ -11,6 +12,7 @@ public class Bullet implements Movable
         position = pos;
         direction = dir;
         type = t;
+        addObserver(Renderer.getInstance());
     }
 
     @Override
@@ -37,6 +39,7 @@ public class Bullet implements Movable
         Logger.enter(this.getClass(), "setPosition()", floor.getClass());
 
         position = floor;
+        notifyObservers();
 
         Logger.exit(this.getClass(), "setPosition()", floor.getClass());
     }
@@ -74,6 +77,7 @@ public class Bullet implements Movable
         Logger.enter(this.getClass(), "destroy()", null);
 
         alive = false;
+        notifyObservers();
 
         Logger.exit(this.getClass(), "destroy()", null);
     }

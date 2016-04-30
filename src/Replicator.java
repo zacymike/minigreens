@@ -1,12 +1,18 @@
+import java.util.Observable;
+
 /**
  * Created by Judit on 2016. 04. 23..
  */
-public class Replicator implements Movable {
+public class Replicator extends Observable implements Movable {
     private Floor position;
     private Direction direction;
     private boolean isauto;
 
     private static Replicator replicator;
+
+    Replicator() {
+        addObserver(Renderer.getInstance());
+    }
 
     public static Replicator getInstance() {
         if (replicator == null) replicator = new Replicator();
@@ -19,6 +25,7 @@ public class Replicator implements Movable {
     @Override
     public void setPosition(Floor position) {
         this.position = position;
+        notifyObservers();
     }
 
     @Override

@@ -3,7 +3,10 @@ public class Box extends Weight implements Element
 {
     private boolean alive;
 
-    Box() { alive = true; }
+    Box() {
+        alive = true;
+        addObserver(Renderer.getInstance());
+    }
 
     @Override
     public void interact(Movable movable)
@@ -69,6 +72,7 @@ public class Box extends Weight implements Element
         Logger.enter(this.getClass(), "destroy()", null);
 
         alive = false;
+        notifyObservers();
 
         Logger.exit(this.getClass(), "destroy()", null);
     }

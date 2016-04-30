@@ -1,5 +1,6 @@
+import java.util.Observable;
 
-public class Wall implements Element
+public class Wall extends Observable implements Element
 {
     private boolean isspecial;
     private SG sg;
@@ -8,6 +9,7 @@ public class Wall implements Element
     {
         isspecial = special;
         sg = null;
+        addObserver(Renderer.getInstance());
     }
 
     public void setIsspecial(boolean isspecial)
@@ -70,7 +72,7 @@ public class Wall implements Element
     private void createSG(Bullet bullet)
     {
         Floor bulletpos = bullet.getPosition();
-        SGYellow yellowsg = SGYellow.getInstance();
+        SGYellow yellowsg = SGYellow.getInstance(); // ???
 
         // Ha ezen a falon van SG akkor azt kitöröljük
         if(sg != null)
@@ -91,7 +93,7 @@ public class Wall implements Element
                 sg = SGBlue.getInstance();
                 sg.setEntry(bulletpos);
                 sg.setWall(this);
-
+                notifyObservers();
                 break;
             case YELLOW:
                 // Ha van más falon már sárga SG akkor azt ki töröljük onnan
@@ -104,6 +106,7 @@ public class Wall implements Element
                 sg = SGYellow.getInstance();
                 sg.setEntry(bulletpos);
                 sg.setWall(this);
+                notifyObservers();
                 break;
         }
     }

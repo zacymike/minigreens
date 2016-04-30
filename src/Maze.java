@@ -29,7 +29,7 @@ public class Maze {
                  ( Colonel.getInstance().getPosition() != f ) &&
                  ( Jaffa.getInstance().getPosition() != f ) &&
                  ( Replicator.getInstance().getPosition() != f ) ) {
-                f.setElement(new ZPM());
+                f.setElement(new ZPM()); //ezt majd valahogy notifyolni kene
                 freePlaceFound = true;
             }
         }

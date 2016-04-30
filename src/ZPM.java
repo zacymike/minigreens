@@ -1,5 +1,8 @@
+import java.util.Observable;
 
-public class ZPM implements Element {
+public class ZPM extends Observable implements Element {
+    ZPM() { addObserver(Renderer.getInstance()); }
+
     @Override
     public void interact(Movable movable) {
 
@@ -34,6 +37,7 @@ public class ZPM implements Element {
         Logger.enter(this.getClass(), "pickedUp()", player.getClass());
 
         player.addZPM();
+        notifyObservers();
 
         Logger.exit(this.getClass(), "pickedUp()", player.getClass());
     }

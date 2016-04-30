@@ -1,13 +1,18 @@
+import java.util.Observable;
 
-public class Door implements Element {
+public class Door extends Observable implements Element {
     private boolean opened;
 
-    Door() { opened = false; }
+    Door() {
+        opened = false;
+        addObserver(Renderer.getInstance());
+    }
 
     public void open() {
         Logger.enter(this.getClass(), "open()", null);
 
         this.opened = true;
+        notifyObservers();
 
         Logger.exit(this.getClass(), "open()", null);
     }
@@ -16,6 +21,7 @@ public class Door implements Element {
         Logger.enter(this.getClass(), "close()", null);
 
         this.opened = false;
+        notifyObservers();
 
         Logger.exit(this.getClass(), "close()", null);
     }

@@ -2,7 +2,7 @@
 public class Gap implements Element {
     @Override
     public void interact(Movable movable) {
-        System.out.println("fuck");
+        System.out.println("fuck"); // wtf? :D
 
     }
 
