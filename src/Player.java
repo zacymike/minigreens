@@ -1,6 +1,6 @@
 
 
-public class Player extends Weight implements Movable
+public abstract class Player extends Weight implements Movable
 {
     private Floor position;
     private Direction direction;
@@ -45,6 +45,7 @@ public class Player extends Weight implements Movable
         Logger.enter(this.getClass(), "addZPM()", null);
 
         numofZPM++;
+        if (( numofZPM % 4 ) == 0 ) autoZPM();
 
         Logger.exit(this.getClass(), "addZPM()", null);
     }
@@ -163,4 +164,6 @@ public class Player extends Weight implements Movable
     {
         return numofZPM;
     }
+
+    abstract void autoZPM();
 }

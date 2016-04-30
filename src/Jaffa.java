@@ -13,4 +13,7 @@ public class Jaffa extends Player {
     {
         jaffa = null;
     }
+
+    @Override
+    void autoZPM() {}
 }

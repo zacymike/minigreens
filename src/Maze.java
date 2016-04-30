@@ -5,11 +5,35 @@ import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Maze {
 
     private static boolean run = true;
     private static Floor[][] maze;
+
+    public static void generateZPM() {
+        int height = maze.length;
+        int width = maze[0].length;
+        int x = 0;
+        int y = 0;
+        boolean freePlaceFound = false;
+
+        while (!freePlaceFound) {
+            Random rand = new Random();
+            x = rand.nextInt(width);
+            y = rand.nextInt(height);
+            Floor f = maze[y][x];
+
+            if ( ( f.getElement() == null ) &&
+                 ( Colonel.getInstance().getPosition() != f ) &&
+                 ( Jaffa.getInstance().getPosition() != f ) &&
+                 ( Replicator.getInstance().getPosition() != f ) ) {
+                f.setElement(new ZPM());
+                freePlaceFound = true;
+            }
+        }
+    }
 
     private enum ParsingState {
         INITIAL,

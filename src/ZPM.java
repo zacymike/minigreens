@@ -33,7 +33,7 @@ public class ZPM implements Element {
     public void pickedUp(Player player) {
         Logger.enter(this.getClass(), "pickedUp()", player.getClass());
 
-
+        player.addZPM();
 
         Logger.exit(this.getClass(), "pickedUp()", player.getClass());
     }
