@@ -1,4 +1,4 @@
-
+import java.util.Observable;
 
 public abstract class Player extends Weight implements Movable
 {
@@ -60,7 +60,8 @@ public abstract class Player extends Weight implements Movable
         if(neighbour != null) {
             neighbour.enter(this);
         }
-
+        setChanged();
+        notifyObservers("step");
         Logger.exit(this.getClass(), "step()", null);
     }
 
@@ -141,7 +142,7 @@ public abstract class Player extends Weight implements Movable
         return position;
     }
 
-    public void shoot(Type type) {
+    public void shoot(ShootType type) {
         Logger.enter(this.getClass(), "shoot()", type.getClass());
 
         Bullet bullet = new Bullet(position, direction, type);

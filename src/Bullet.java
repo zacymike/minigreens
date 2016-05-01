@@ -4,10 +4,10 @@ public class Bullet extends Observable implements Movable
 {
     private Floor position;
     private Direction direction;
-    private Type type;
+    private ShootType type;
     private boolean alive;
 
-    public Bullet(Floor pos, Direction dir, Type t)
+    public Bullet(Floor pos, Direction dir, ShootType t)
     {
         position = pos;
         direction = dir;
@@ -58,14 +58,14 @@ public class Bullet extends Observable implements Movable
         return direction;
     }
 
-    public Type getType() {
+    public ShootType getType() {
         Logger.enter(this.getClass(), "getType()", null);
         Logger.exit(this.getClass(), "getType()", null);
 
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(ShootType type) {
         Logger.enter(this.getClass(), "setType()", type.getClass());
 
         this.type = type;

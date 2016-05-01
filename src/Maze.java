@@ -1,16 +1,20 @@
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.io.IOException;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 import java.util.Random;
 
-public class Maze {
-
+public class Maze extends Observable
+{
     private static boolean run = true;
     private static Floor[][] maze;
+    private static State gamestate = State.MENU;
 
     public static void generateZPM() {
         int height = maze.length;
@@ -57,6 +61,11 @@ public class Maze {
      */
     public static void main(String[] args) throws IOException
     {
+        Renderer.getInstance().setState(gamestate);
+        WindowFrame mazeframe = new WindowFrame(Renderer.getInstance());
+        mazeframe.setLocationRelativeTo(null);
+        mazeframe.setVisible(true);
+
         //ReadMaze("tesztek/setdirtest.txt");
 
         InputStreamReader isr = new InputStreamReader(System.in);
@@ -132,6 +141,10 @@ public class Maze {
                             maze[row][col].setNeighbours(Direction.WEST, maze[row][col-1]);
                         }
                     }
+
+                    Renderer.getInstance().setMaze(maze);
+                    mazeframe.refreshMap();
+
                     break;
 
                 /* print filename
@@ -311,7 +324,7 @@ public class Maze {
                 case "shoot":
                     if(masodik != null || harmadik != null)
                     {
-                        Type type;
+                        ShootType type;
                         if ((type = parseType(harmadik)) != null)
                         {
                             switch (masodik)
@@ -491,22 +504,22 @@ public class Maze {
 
         return dir;
     }
-    private  static  Type parseType(String strtype)
+    private  static  ShootType parseType(String strtype)
     {
-        Type type;
+        ShootType type;
         switch (strtype)
         {
             case "b":
-                type =  Type.BLUE;
+                type =  ShootType.BLUE;
                 break;
             case "y":
-                type =  Type.YELLOW;
+                type =  ShootType.YELLOW;
                 break;
             case "g":
-                type =  Type.GREEN;
+                type =  ShootType.GREEN;
                 break;
             case "r":
-                type =  Type.RED;
+                type =  ShootType.RED;
                 break;
             default:
                 type =  null;
@@ -610,19 +623,19 @@ public class Maze {
                             j++;
                             System.out.print(line.charAt(j));
                             if (line.charAt(j) == 'b') {
-                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, Type.BLUE);
+                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, ShootType.BLUE);
                                 Colonel.getInstance().addBullet(bullet);
                                 state = ParsingState.ELEMENT_SPECIFIED;
                             } else if (line.charAt(j) == 'y') {
-                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, Type.YELLOW);
+                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, ShootType.YELLOW);
                                 Colonel.getInstance().addBullet(bullet);
                                 state = ParsingState.ELEMENT_SPECIFIED;
                             } else if (line.charAt(j) == 'r') {
-                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, Type.RED);
+                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, ShootType.RED);
                                 Jaffa.getInstance().addBullet(bullet);
                                 state = ParsingState.ELEMENT_SPECIFIED;
                             } else if (line.charAt(j) == 'g') {
-                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, Type.GREEN);
+                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, ShootType.GREEN);
                                 Jaffa.getInstance().addBullet(bullet);
                                 state = ParsingState.ELEMENT_SPECIFIED;
                             } else {
