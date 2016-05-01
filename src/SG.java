@@ -3,7 +3,7 @@ public class SG implements Element
 {
     private Floor entry;
     private Wall wall;
-    private ShootType type;
+    private Type type;
 
     public SG() { entry = null; }
 
@@ -32,12 +32,12 @@ public class SG implements Element
         this.wall = wall;
     }
 
-    public ShootType getType()
+    public Type getType()
     {
         return type;
     }
 
-    public void setType(ShootType type)
+    public void setType(Type type)
     {
         this.type = type;
     }

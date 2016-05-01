@@ -1,5 +1,3 @@
-import java.util.Observable;
-
 public abstract class Player extends Weight implements Movable
 {
     private Floor position;
@@ -142,7 +140,7 @@ public abstract class Player extends Weight implements Movable
         return position;
     }
 
-    public void shoot(ShootType type) {
+    public void shoot(Type type) {
         Logger.enter(this.getClass(), "shoot()", type.getClass());
 
         Bullet bullet = new Bullet(position, direction, type);

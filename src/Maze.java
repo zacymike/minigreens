@@ -1,6 +1,4 @@
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.*;
 import java.io.IOException;
 import java.io.File;
@@ -324,7 +322,7 @@ public class Maze extends Observable
                 case "shoot":
                     if(masodik != null || harmadik != null)
                     {
-                        ShootType type;
+                        Type type;
                         if ((type = parseType(harmadik)) != null)
                         {
                             switch (masodik)
@@ -504,22 +502,22 @@ public class Maze extends Observable
 
         return dir;
     }
-    private  static  ShootType parseType(String strtype)
+    private  static Type parseType(String strtype)
     {
-        ShootType type;
+        Type type;
         switch (strtype)
         {
             case "b":
-                type =  ShootType.BLUE;
+                type =  Type.BLUE;
                 break;
             case "y":
-                type =  ShootType.YELLOW;
+                type =  Type.YELLOW;
                 break;
             case "g":
-                type =  ShootType.GREEN;
+                type =  Type.GREEN;
                 break;
             case "r":
-                type =  ShootType.RED;
+                type =  Type.RED;
                 break;
             default:
                 type =  null;
@@ -623,19 +621,19 @@ public class Maze extends Observable
                             j++;
                             System.out.print(line.charAt(j));
                             if (line.charAt(j) == 'b') {
-                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, ShootType.BLUE);
+                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, Type.BLUE);
                                 Colonel.getInstance().addBullet(bullet);
                                 state = ParsingState.ELEMENT_SPECIFIED;
                             } else if (line.charAt(j) == 'y') {
-                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, ShootType.YELLOW);
+                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, Type.YELLOW);
                                 Colonel.getInstance().addBullet(bullet);
                                 state = ParsingState.ELEMENT_SPECIFIED;
                             } else if (line.charAt(j) == 'r') {
-                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, ShootType.RED);
+                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, Type.RED);
                                 Jaffa.getInstance().addBullet(bullet);
                                 state = ParsingState.ELEMENT_SPECIFIED;
                             } else if (line.charAt(j) == 'g') {
-                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, ShootType.GREEN);
+                                Bullet bullet = new Bullet(maze[i][indexOfFloor], Direction.NORTH, Type.GREEN);
                                 Jaffa.getInstance().addBullet(bullet);
                                 state = ParsingState.ELEMENT_SPECIFIED;
                             } else {
