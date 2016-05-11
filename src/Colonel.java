@@ -16,6 +16,6 @@ public class Colonel extends Player {
 
     @Override
     void autoZPM() {
-        Maze.generateZPM();
+        Maze.getInstance().generateZPM();
     }
 }

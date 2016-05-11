@@ -1,4 +1,9 @@
+import javafx.scene.input.KeyCode;
+import sun.awt.AWTAccessor;
+import sun.awt.ExtendedKeyCodes;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.*;
 import java.io.IOException;
 import java.io.File;
@@ -10,11 +15,154 @@ import java.util.Random;
 
 public class Maze extends Observable
 {
-    private static boolean run = true;
-    private static Floor[][] maze;
-    private static State gamestate = State.MENU;
+    private static Maze instance;
+    private boolean run = true;
+    private Floor[][] maze;
+    private State gamestate = State.MENU;
+    private MenuOptions options = MenuOptions.MAPS;
+    private int selectedmap = 0;
+    private int mapscountcol = 4;
+    private int mapscountrow = 2;
+    private WindowFrame mazeframe;
 
-    public static void generateZPM() {
+    public class KeyPressListener implements KeyListener
+    {
+        @Override
+        public void keyPressed(KeyEvent kEvent)
+        {
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e)
+        {
+            switch (gamestate)
+            {
+
+                case MENU:
+                    switch (options)
+                    {
+
+                        case MAPS:
+                            if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                            {
+                                gamestate = State.MAPS;
+                                Renderer.getInstance().setState(gamestate);
+                                setChanged();
+                                notifyObservers();
+                            }
+                            if (e.getKeyCode() == KeyEvent.VK_DOWN)
+                            {
+                                options = MenuOptions.EXIT;
+                                Renderer.getInstance().setMenustate(options);
+                                setChanged();
+                                notifyObservers();
+                            }
+                            break;
+                        case EXIT:
+                            if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                            {
+                                System.exit(0);
+                            }
+                            if (e.getKeyCode() == KeyEvent.VK_UP)
+                            {
+                                options = MenuOptions.MAPS;
+                                Renderer.getInstance().setMenustate(options);
+                                setChanged();
+                                notifyObservers();
+                            }
+                            break;
+                    }
+                    break;
+                case MAPS:
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                    {
+                        loadMap(String.format("%d.txt", selectedmap));
+                        gamestate = State.GAME;
+                        Renderer.getInstance().setState(gamestate);
+                        setChanged();
+                        notifyObservers();
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_DOWN)
+                    {
+                        if (mapscountrow * mapscountcol > selectedmap + mapscountcol)
+                        {
+                            selectedmap += mapscountcol;
+                            Renderer.getInstance().setSelectedMap(selectedmap);
+                            setChanged();
+                            notifyObservers();
+                        }
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_UP)
+                    {
+                        if (0 <= selectedmap - mapscountcol)
+                        {
+                            selectedmap -= mapscountcol;
+                            Renderer.getInstance().setSelectedMap(selectedmap);
+                            setChanged();
+                            notifyObservers();
+                        }
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_LEFT)
+                    {
+                        if (0 <= selectedmap - 1)
+                        {
+                            selectedmap--;
+                            Renderer.getInstance().setSelectedMap(selectedmap);
+                            setChanged();
+                            notifyObservers();
+                        }
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+                    {
+                        if (mapscountrow * mapscountcol > selectedmap + 1)
+                        {
+                            selectedmap++;
+                            Renderer.getInstance().setSelectedMap(selectedmap);
+                            setChanged();
+                            notifyObservers();
+                        }
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+                    {
+                        gamestate = State.MENU;
+                        Renderer.getInstance().setState(gamestate);
+                        setChanged();
+                        notifyObservers();
+                    }
+                    break;
+                case GAME:
+                    break;
+            }
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e)
+        {
+        }
+    }
+
+    public static Maze getInstance() {
+        if (instance == null) instance = new Maze();
+        return instance;
+    }
+
+    private Maze()
+    {
+        addObserver(Renderer.getInstance());
+        Renderer.getInstance().setMenuMapsDimension(mapscountrow, mapscountcol);
+        Renderer.getInstance().setSelectedMap(0);
+        Renderer.getInstance().setMenustate(options);
+        Renderer.getInstance().setState(gamestate);
+
+        mazeframe = new WindowFrame(Renderer.getInstance(), this);
+        mazeframe.setLocationRelativeTo(null);
+        mazeframe.setVisible(true);
+
+        KeyPressListener keyPressListener = new KeyPressListener();
+        mazeframe.addKeyListener(keyPressListener);
+    }
+
+    public void generateZPM() {
         int height = maze.length;
         int width = maze[0].length;
         int x = 0;
@@ -37,6 +185,40 @@ public class Maze extends Observable
         }
     }
 
+    /**
+     *  Adott fájlnevű pálya betöltése
+     */
+    public  void loadMap(String filename)
+    {
+        String[] palya = {"fg", "sd", "fg"};
+        try
+        {
+            palya = ReadMaze(String.format("{0}.txt", selectedmap));
+        } catch (IOException e1)
+        {
+            e1.printStackTrace();
+        }
+
+        parseMaze(palya);
+
+        for(int row = 0; row < maze.length; row++)
+        {
+            for (int col = 0; col < maze[0].length; col++)
+            {
+                if(row-1 >= 0)
+                    maze[row][col].setNeighbours(Direction.NORTH, maze[row-1][col]);
+                if(row+1 < maze.length)
+                    maze[row][col].setNeighbours(Direction.SOUTH, maze[row+1][col]);
+                if(col+1 < maze[0].length)
+                    maze[row][col].setNeighbours(Direction.EAST, maze[row][col+1]);
+                if(col-1 >= 0)
+                    maze[row][col].setNeighbours(Direction.WEST, maze[row][col-1]);
+            }
+        }
+
+        Renderer.getInstance().setMaze(maze);
+    }
+
     private enum ParsingState {
         INITIAL,
         ERROR,
@@ -53,17 +235,12 @@ public class Maze extends Observable
         FLOOR_ADDED
     }
 
-    private static ParsingState state = ParsingState.INITIAL;
+    private ParsingState state = ParsingState.INITIAL;
     /**
      * Ez a függvény a main függvény, innen indul a játék
      */
-    public static void main(String[] args) throws IOException
+    public void run() throws IOException
     {
-        Renderer.getInstance().setState(gamestate);
-        WindowFrame mazeframe = new WindowFrame(Renderer.getInstance());
-        mazeframe.setLocationRelativeTo(null);
-        mazeframe.setVisible(true);
-
         //ReadMaze("tesztek/setdirtest.txt");
 
         InputStreamReader isr = new InputStreamReader(System.in);
@@ -466,7 +643,7 @@ public class Maze extends Observable
         }
     }
 
-    private  static  Direction parseDirection(String strdir)
+    private   Direction parseDirection(String strdir)
     {
         Direction dir;
         switch (strdir)
@@ -502,7 +679,7 @@ public class Maze extends Observable
 
         return dir;
     }
-    private  static Type parseType(String strtype)
+    private  Type parseType(String strtype)
     {
         Type type;
         switch (strtype)
@@ -527,7 +704,7 @@ public class Maze extends Observable
         return type;
     }
 
-    private static void parseMaze(String[] palya) {
+    private void parseMaze(String[] palya) {
         boolean hadJaffa = false;
         boolean hadColonel = false;
         boolean hadReplicator = false;
@@ -849,7 +1026,7 @@ public class Maze extends Observable
      * ez lesz a mi pályaleíró nyelvünkkel megadott pálya
      * visszatérési értéke pedig string tömbben megadott pálya
      */
-    public static String[] ReadMaze(String path) throws IOException {
+    public String[] ReadMaze(String path) throws IOException {
         URL url = Maze.class.getResource(path);
         File file2 = new File(url.getPath());
         String fname = file2.toString();
@@ -874,7 +1051,7 @@ public class Maze extends Observable
     /**
      * Ez a függvény való a pálya változásainak elmentésére, egy új/vagy régi txt fileba menti el
      */
-    public static void WriteMaze(String path, String[] ujpalya){
+    public void WriteMaze(String path, String[] ujpalya){
         try {
             WriteFile data = new WriteFile(path, true);
             for(int i = 0; i < ujpalya.length; i++)
@@ -884,7 +1061,7 @@ public class Maze extends Observable
         }
     }
 
-    public static String[][] createStringMap(Floor[][] maze)
+    public String[][] createStringMap(Floor[][] maze)
     {
         int rows = maze.length;
         int cols = maze[0].length;
@@ -1142,7 +1319,7 @@ public class Maze extends Observable
     /**
      * Ez a függvény a képernyő/konzol törtlését végzi
      */
-    public static void clear()
+    public void clear()
     {
         try
         {

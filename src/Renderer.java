@@ -1,14 +1,24 @@
 import com.sun.xml.internal.ws.db.DatabindingImpl;
+import sun.plugin2.util.ColorUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Renderer extends JPanel implements Observer {
+public class Renderer extends JPanel implements Observer{
     private static Renderer renderer;
     private Floor[][] maze;
     private State gamestate;
+    private MenuOptions menustate = MenuOptions.MAPS;
+    private static int width = 600;
+    private static int height = 600;
+    private static int fontsize = 60;
+    private static int menucols = 4;
+    private static int menurows = 2;
+    private static int selectedmap = 0;
 
     public static Renderer getInstance() {
         if (renderer == null) renderer = new Renderer();
@@ -25,6 +35,22 @@ public class Renderer extends JPanel implements Observer {
         this.gamestate = gamestate;
     }
 
+    public void setMenustate(MenuOptions menustate)
+    {
+        this.menustate = menustate;
+    }
+
+    public void setMenuMapsDimension(int rows, int cols)
+    {
+        menurows = rows;
+        menucols = cols;
+    }
+
+    public void setSelectedMap(int id)
+    {
+        selectedmap = id;
+    }
+
     @Override
     public void update(Observable observable, Object o) {
         repaint();
@@ -36,14 +62,82 @@ public class Renderer extends JPanel implements Observer {
         super.paintComponent(g);
 
         setBackground(Color.BLACK);
-
-        renderMaze(g);
-        renderMovables(g);
+        render(g);
     }
 
-    public void render(State gamestate)
+    public void render(Graphics g)
     {
+        switch(gamestate)
+        {
 
+            case MENU:
+                /**
+                 * Háttér rajzolás
+                 */
+                g.setColor(new Color(41, 40, 51));
+                g.fillRect(0, 0, width, height);
+
+                /**
+                 * Menüpontok rajzolása
+                 */
+                g.setFont(new Font("Arial", Font.BOLD, fontsize));
+                switch(menustate)
+                {
+
+                    case MAPS:
+                        g.setColor(new Color(209, 197, 86));
+                        g.drawString("MAPS", width/2 - (fontsize*2), height/2 - fontsize);
+                        g.setColor(new Color(209, 87, 70));
+                        g.drawString("EXIT", width/2 - (fontsize*2), height/2 + fontsize);
+                        break;
+                    case EXIT:
+                        g.setColor(new Color(209, 87, 70));
+                        g.drawString("MAPS", width/2 - (fontsize*2), height/2 - fontsize);
+                        g.setColor(new Color(209, 197, 86));
+                        g.drawString("EXIT", width/2 - (fontsize*2), height/2 + fontsize);
+                        break;
+                }
+
+                break;
+            case MAPS:
+                /**
+                 * Háttér rajzolás
+                 */
+                g.setColor(new Color(41, 40, 51));
+                g.fillRect(0, 0, width, height);
+
+                /**
+                 * Maps felirat rajzolása
+                 */
+                g.setColor(new Color(209, 87, 70));
+                g.setFont(new Font("Arial", Font.PLAIN, fontsize));
+                g.drawString("MAPS", width/2 - (fontsize*2), 100);
+
+                /**
+                 * Map ikonok kirajzolása
+                 */
+                int paddingx= 25;
+                int paddingy= 250;
+                for(int i = 0; i < menurows; i++)
+                {
+                    for(int j = 0; j < menucols; j++)
+                    {
+                        if(i*menucols+j == selectedmap)
+                            g.setColor(new Color(209, 197, 86));
+                        else
+                            g.setColor(new Color(209, 87, 70));
+                        g.drawRect(paddingx + j*150, paddingy + i*150, 100, 100);
+                        g.setColor(Color.BLACK);
+                        g.drawString(String.format("%d", i*menucols+j+1),paddingx + j*150 + 25, paddingy + i*150 + 60);
+                    }
+                }
+
+                break;
+            case GAME:
+                renderMaze(g);
+                renderMovables(g);
+                break;
+        }
     }
 
     public void renderMaze(Graphics g)
