@@ -76,6 +76,7 @@ public class Maze extends Observable
                 case MAPS:
                     if (e.getKeyCode() == KeyEvent.VK_ENTER)
                     {
+                        System.out.print(String.format("%d.txt", selectedmap));
                         loadMap(String.format("%d.txt", selectedmap));
                         gamestate = State.GAME;
                         Renderer.getInstance().setState(gamestate);
@@ -130,7 +131,180 @@ public class Maze extends Observable
                         notifyObservers();
                     }
                     break;
+                /**
+                 * Billentyűk kezelése a játék közben
+                 */
                 case GAME:
+                    /**
+                     * ESC billentyűre visszalépés a menübe
+                     */
+                    if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+                    {
+                        gamestate = State.MENU;
+                        Renderer.getInstance().setState(gamestate);
+                        setChanged();
+                        notifyObservers();
+                    }
+                    /**
+                     * Colonelhez tartozó billentyűk kezelése
+                     */
+                    /**
+                     * Lépéshez és forgáshoz tartozó billentyűk kezelése
+                     */
+                    if (e.getKeyCode() == KeyEvent.VK_DOWN && Colonel.getInstance().getPosition() != null)
+                    {
+                        if (Colonel.getInstance().getDirection() == Direction.SOUTH)
+                            Colonel.getInstance().step();
+                        else
+                            Colonel.getInstance().setDirection(Direction.SOUTH);
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_UP && Colonel.getInstance().getPosition() != null)
+                    {
+                        if (Colonel.getInstance().getDirection() == Direction.NORTH)
+                            Colonel.getInstance().step();
+                        else
+                            Colonel.getInstance().setDirection(Direction.NORTH);
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_LEFT && Colonel.getInstance().getPosition() != null)
+                    {
+                        if (Colonel.getInstance().getDirection() == Direction.WEST)
+                            Colonel.getInstance().step();
+                        else
+                            Colonel.getInstance().setDirection(Direction.WEST);
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_RIGHT && Colonel.getInstance().getPosition() != null)
+                    {
+                        if (Colonel.getInstance().getDirection() == Direction.EAST)
+                            Colonel.getInstance().step();
+                        else
+                            Colonel.getInstance().setDirection(Direction.EAST);
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    /**
+                     * Lövésekhez tartozó billentyűk kezelése
+                     */
+                    if (e.getKeyCode() == KeyEvent.VK_CONTROL && Colonel.getInstance().getPosition() != null)
+                    {
+                        Colonel.getInstance().shoot(Type.BLUE);
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_SHIFT && Colonel.getInstance().getPosition() != null)
+                    {
+                        Colonel.getInstance().shoot(Type.YELLOW);
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    /**
+                     * Felvételhez és lerakáshoz tartozó billentyűk kezelése
+                     */
+                    if (e.getKeyCode() == KeyEvent.VK_K && Colonel.getInstance().getPosition() != null)
+                    {
+                        Colonel.getInstance().pickUp();
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_L && Colonel.getInstance().getPosition() != null)
+                    {
+                        Colonel.getInstance().putDown();
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    /**
+                     * Jaffához tartozó billentyűk kezelése
+                     */
+                    /**
+                     * Lépéshez és forgáshoz tartozó billentyűk kezelése
+                     */
+                    if (e.getKeyCode() == KeyEvent.VK_S && Jaffa.getInstance().getPosition() != null)
+                    {
+                        if (Jaffa.getInstance().getDirection() == Direction.SOUTH)
+                            Jaffa.getInstance().step();
+                        else
+                            Jaffa.getInstance().setDirection(Direction.SOUTH);
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_W && Jaffa.getInstance().getPosition() != null)
+                    {
+                        if (Jaffa.getInstance().getDirection() == Direction.NORTH)
+                            Jaffa.getInstance().step();
+                        else
+                            Jaffa.getInstance().setDirection(Direction.NORTH);
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_A && Jaffa.getInstance().getPosition() != null)
+                    {
+                        if (Jaffa.getInstance().getDirection() == Direction.WEST)
+                            Jaffa.getInstance().step();
+                        else
+                            Jaffa.getInstance().setDirection(Direction.WEST);
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_D && Jaffa.getInstance().getPosition() != null)
+                    {
+                        if (Jaffa.getInstance().getDirection() == Direction.EAST)
+                            Jaffa.getInstance().step();
+                        else
+                            Jaffa.getInstance().setDirection(Direction.EAST);
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    /**
+                     * Lövésekhez tartozó billentyűk kezelése
+                     */
+                    if (e.getKeyCode() == KeyEvent.VK_Q && Jaffa.getInstance().getPosition() != null)
+                    {
+                        Jaffa.getInstance().shoot(Type.RED);
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_E && Jaffa.getInstance().getPosition() != null)
+                    {
+                        Jaffa.getInstance().shoot(Type.GREEN);
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    /**
+                     * Felvételhez és lerakáshoz tartozó billentyűk kezelése
+                     */
+                    if (e.getKeyCode() == KeyEvent.VK_R && Jaffa.getInstance().getPosition() != null)
+                    {
+                        Jaffa.getInstance().pickUp();
+
+                        setChanged();
+                        notifyObservers();
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_F && Jaffa.getInstance().getPosition() != null)
+                    {
+                        Jaffa.getInstance().putDown();
+
+                        setChanged();
+                        notifyObservers();
+                    }
                     break;
             }
         }
@@ -193,7 +367,7 @@ public class Maze extends Observable
         String[] palya = {"fg", "sd", "fg"};
         try
         {
-            palya = ReadMaze(String.format("{0}.txt", selectedmap));
+            palya = ReadMaze(filename);
         } catch (IOException e1)
         {
             e1.printStackTrace();
