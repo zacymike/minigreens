@@ -8,10 +8,7 @@ import java.io.*;
 import java.io.IOException;
 import java.io.File;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Random;
+import java.util.*;
 
 public class Maze extends Observable
 {
@@ -388,6 +385,29 @@ public class Maze extends Observable
                 if(col-1 >= 0)
                     maze[row][col].setNeighbours(Direction.WEST, maze[row][col-1]);
             }
+        }
+
+        List<Door> doors = new ArrayList<>();
+        List<Scale> scales = new ArrayList<>();
+        for (int row = 0; row < maze.length; row ++) {
+            for (int col = 0; col < maze[0].length; col++) {
+                if(maze[row][col].getElement() != null) {
+                    if (maze[row][col].getElement() instanceof Door) {
+                        doors.add((Door) maze[row][col].getElement());
+                    } else if (maze[row][col].getElement() instanceof Scale) {
+                        scales.add((Scale) maze[row][col].getElement());
+                    }
+                }
+            }
+        }
+
+        if (doors.size() != scales.size()) {
+            System.out.println("Az ajtok es merlegek szamanak meg kell egyeznie.");
+            return;
+        }
+
+        for (int i = 0; i < scales.size(); i++) {
+            scales.get(i).setDoor(doors.get(i));
         }
 
         Renderer.getInstance().setMaze(maze);
