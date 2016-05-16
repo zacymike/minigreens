@@ -13,9 +13,11 @@ public class WindowFrame extends JFrame
     public WindowFrame(JPanel panel, Maze maze)
     {
         this.panel = panel;
-        setSize(new Dimension(600, 600));
+        setSize(new Dimension(630, 630));
+        setResizable(false);
         setTitle("Minigreens");
         add(panel);
+        pack();
     }
 
     public void refreshMap()

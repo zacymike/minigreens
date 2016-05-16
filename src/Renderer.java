@@ -6,37 +6,45 @@ import java.util.Observer;
 
 public class Renderer extends JPanel implements Observer{
     private static Renderer renderer;
+    private static HashMap<String, Image> textures;
     private Floor[][] maze;
     private State gamestate;
     private MenuOptions menustate = MenuOptions.MAPS;
-    private static int width = 600;
-    private static int height = 600;
+    private static int width = 630;
+    private static int height = 630;
     private static final int cellsize = 30;
     private static int fontsize = 60;
     private static int menucols = 4;
     private static int menurows = 2;
     private static int selectedmap = 0;
-    private static HashMap<String, Image> textures;
 
     private Renderer()
     {
-        textures = new HashMap<String, Image>();
-        textures.put("floor", new ImageIcon("floor.png").getImage());
-        textures.put("colonel", new ImageIcon("colonel.png").getImage());
-        textures.put("jaffa", new ImageIcon("jaffa.png").getImage());
-        textures.put("replicator", new ImageIcon("replicator.png").getImage());
-        textures.put("gap", new ImageIcon("gap.png").getImage());
-        textures.put("dooropen", new ImageIcon("dooropen.png").getImage());
-        textures.put("doorclose", new ImageIcon("doorclose.png").getImage());
-        textures.put("scale", new ImageIcon("scale.png").getImage());
-        textures.put("wall", new ImageIcon("wall.png").getImage());
-        textures.put("wallspecial", new ImageIcon("wallspecial.png").getImage());
-        textures.put("sgblue", new ImageIcon("sgblue.png").getImage());
-        textures.put("sgyellow", new ImageIcon("sgyellow.png").getImage());
-        textures.put("sgred", new ImageIcon("sgred.png").getImage());
-        textures.put("sggreen", new ImageIcon("sggreen.png").getImage());
-        textures.put("box", new ImageIcon("box.png").getImage());
-        textures.put("zpm", new ImageIcon("zpm.png").getImage());
+        setPreferredSize(new Dimension(width, height));
+
+        textures = new HashMap<>();
+        textures.put("floor", new ImageIcon(getClass().getResource("floor.png")).getImage());
+        textures.put("colonelup", new ImageIcon(getClass().getResource("colonelup.png")).getImage());
+        textures.put("coloneldown", new ImageIcon(getClass().getResource("coloneldown.png")).getImage());
+        textures.put("colonelleft", new ImageIcon(getClass().getResource("colonelleft.png")).getImage());
+        textures.put("colonelright", new ImageIcon(getClass().getResource("colonelright.png")).getImage());
+        textures.put("jaffaup", new ImageIcon(getClass().getResource("jaffaup.png")).getImage());
+        textures.put("jaffadown", new ImageIcon(getClass().getResource("jaffadown.png")).getImage());
+        textures.put("jaffaleft", new ImageIcon(getClass().getResource("jaffaleft.png")).getImage());
+        textures.put("jaffaright", new ImageIcon(getClass().getResource("jaffaright.png")).getImage());
+        textures.put("replicator", new ImageIcon(getClass().getResource("replicator.png")).getImage());
+        textures.put("gap", new ImageIcon(getClass().getResource("gap.png")).getImage());
+        textures.put("dooropen", new ImageIcon(getClass().getResource("dooropen.png")).getImage());
+        textures.put("doorclose", new ImageIcon(getClass().getResource("doorclosed.png")).getImage());
+        textures.put("scale", new ImageIcon(getClass().getResource("scale.png")).getImage());
+        textures.put("wall", new ImageIcon(getClass().getResource("wall.png")).getImage());
+        textures.put("wallspecial", new ImageIcon(getClass().getResource("wallspecial.png")).getImage());
+        textures.put("sgblue", new ImageIcon(getClass().getResource("sgblue.png")).getImage());
+        textures.put("sgyellow", new ImageIcon(getClass().getResource("sgyellow.png")).getImage());
+        textures.put("sgred", new ImageIcon(getClass().getResource("sgred.png")).getImage());
+        textures.put("sggreen", new ImageIcon(getClass().getResource("sggreen.png")).getImage());
+        textures.put("box", new ImageIcon(getClass().getResource("box.png")).getImage());
+        textures.put("zpm", new ImageIcon(getClass().getResource("zpm.png")).getImage());
     }
 
     public static Renderer getInstance() {
@@ -170,8 +178,8 @@ public class Renderer extends JPanel implements Observer{
     public void renderFloor(Graphics g, int x, int y)
     {
         g.drawImage(textures.get("floor"), x, y, null);
-        if(maze[x/cellsize][y/cellsize].getElement() != null)
-            renderElement(g, x, y, maze[x/cellsize][y/cellsize].getElement());
+        if(maze[y/cellsize][x/cellsize].getElement() != null)
+            renderElement(g, x, y, maze[y/cellsize][x/cellsize].getElement());
     }
 
     public void renderElement(Graphics g, int x, int y, Element element)
@@ -198,7 +206,7 @@ public class Renderer extends JPanel implements Observer{
          */
         else if (element instanceof Gap)
         {
-            g.drawImage(textures.get("dgap"), x, y, null);
+            g.drawImage(textures.get("gap"), x, y, null);
         }
         /**
          * Mérleg kirajzolása
@@ -281,14 +289,42 @@ public class Renderer extends JPanel implements Observer{
 
     public void renderOneill(Graphics g, int x, int y)
     {
-        g.setColor(Color.GRAY);
-        g.fillOval(x, y, 20, 20);
+        // Colonel iránya szerinti kép kirajzolása
+        switch (Colonel.getInstance().getDirection())
+        {
+            case NORTH:
+                g.drawImage(textures.get("colonelup"), x, y, null);
+                break;
+            case EAST:
+                g.drawImage(textures.get("colonelright"), x, y, null);
+                break;
+            case SOUTH:
+                g.drawImage(textures.get("coloneldown"), x, y, null);
+                break;
+            case WEST:
+                g.drawImage(textures.get("colonelleft"), x, y, null);
+                break;
+        }
     }
 
     public void renderJaffa(Graphics g, int x, int y)
     {
-        g.setColor(Color.PINK);
-        g.fillOval(x, y, 20, 20);
+        // Jaffa iránya szerinti kép kirajzolása
+        switch (Jaffa.getInstance().getDirection())
+        {
+            case NORTH:
+                g.drawImage(textures.get("jaffaup"), x, y, null);
+                break;
+            case EAST:
+                g.drawImage(textures.get("jaffaright"), x, y, null);
+                break;
+            case SOUTH:
+                g.drawImage(textures.get("jaffadown"), x, y, null);
+                break;
+            case WEST:
+                g.drawImage(textures.get("jaffaleft"), x, y, null);
+                break;
+        }
     }
 
     public void renderBullet(Graphics g, int x, int y, Bullet bullet)
@@ -299,6 +335,6 @@ public class Renderer extends JPanel implements Observer{
 
     public void renderReplicator(Graphics g, int x, int y)
     {
-
+        g.drawImage(textures.get("replicator"), x, y, null);
     }
 }

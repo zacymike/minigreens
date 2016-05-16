@@ -76,7 +76,6 @@ public class Maze extends Observable
                 case MAPS:
                     if (e.getKeyCode() == KeyEvent.VK_ENTER)
                     {
-                        System.out.print(String.format("%d.txt", selectedmap));
                         loadMap(String.format("%d.txt", selectedmap));
                         gamestate = State.GAME;
                         Renderer.getInstance().setState(gamestate);
@@ -331,6 +330,7 @@ public class Maze extends Observable
         mazeframe = new WindowFrame(Renderer.getInstance(), this);
         mazeframe.setLocationRelativeTo(null);
         mazeframe.setVisible(true);
+        AudioSFX.playSound("theme", true);
 
         KeyPressListener keyPressListener = new KeyPressListener();
         mazeframe.addKeyListener(keyPressListener);

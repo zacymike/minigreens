@@ -60,6 +60,7 @@ public abstract class Player extends Weight implements Movable
         }
         setChanged();
         notifyObservers("step");
+
         Logger.exit(this.getClass(), "step()", null);
     }
 
@@ -143,6 +144,7 @@ public abstract class Player extends Weight implements Movable
     public void shoot(Type type) {
         Logger.enter(this.getClass(), "shoot()", type.getClass());
 
+        AudioSFX.playSound("shoot", false);
         Bullet bullet = new Bullet(position, direction, type);
         bullet.step();
 
