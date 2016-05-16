@@ -22,7 +22,7 @@ public class Scale implements Element
     {
         Logger.enter(this.getClass(), "interact()", player.getClass());
 
-        // jatekos ralep, suly hozzaadodik, ha van nala doboz, akkor annak is
+        // jatekos ralep, suly hozzaadodik a szamlalohoz, ha van nala doboz, akkor annak is
         player.setPosition(player.getPosition().getNeighbour(player.getDirection()));
         current_w += player.getWeight();
         if (player.getBox() != null) current_w += player.getBox().getWeight();
@@ -85,8 +85,10 @@ public class Scale implements Element
     {
         Logger.enter(this.getClass(), "steppedOut()", player.getClass());
 
-        // player sulyanak levonasa, ha sulykorlat ala kerulunk, bezarjuk az ajtot (ha nyitva volt)
+        // player sulyanak levonasa (ha van nala doboz, annak is)
+        // ha sulykorlat ala kerulunk, bezarjuk az ajtot (ha nyitva volt)
         current_w -= player.getWeight();
+        if (player.getBox() != null) current_w -= player.getBox().getWeight();
         if(door.isOpened() && (limit > current_w)) {
             door.close();
         }
