@@ -23,6 +23,12 @@ public class Box extends Weight implements Element
     }
 
     @Override
+    public void interact(Replicator replicator)
+    {
+
+    }
+
+    @Override
     public void interact(Bullet bullet)
     {
         Logger.enter(this.getClass(), "interact()", bullet.getClass());
@@ -57,6 +63,12 @@ public class Box extends Weight implements Element
         Logger.enter(this.getClass(), "steppedOut()", player.getClass());
 
         Logger.exit(this.getClass(), "steppedOut()", player.getClass());
+    }
+
+    @Override
+    public void steppedOut(Replicator repliactor)
+    {
+
     }
 
     @Override

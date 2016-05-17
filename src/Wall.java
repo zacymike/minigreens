@@ -54,6 +54,15 @@ public class Wall extends Observable implements Element
     }
 
     @Override
+    public void interact(Replicator replicator)
+    {
+        if(isspecial && sg != null)
+        {
+            sg.interact(replicator);
+        }
+    }
+
+    @Override
     public void interact(Bullet bullet)
     {
         Logger.enter(this.getClass(), "interact()", bullet.getClass());
@@ -149,6 +158,12 @@ public class Wall extends Observable implements Element
         Logger.enter(this.getClass(), "steppedOut()", player.getClass());
 
         Logger.exit(this.getClass(), "steppedOut()", player.getClass());
+    }
+
+    @Override
+    public void steppedOut(Replicator repliactor)
+    {
+
     }
 
     @Override

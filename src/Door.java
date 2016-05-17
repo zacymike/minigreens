@@ -50,6 +50,14 @@ public class Door extends Observable implements Element {
     }
 
     @Override
+    public void interact(Replicator replicator)
+    {
+        if (opened) {
+            replicator.setPosition(replicator.getPosition().getNeighbour(replicator.getDirection()));
+        }
+    }
+
+    @Override
     public void interact(Bullet bullet)
     {
         Logger.enter(this.getClass(), "interact()", bullet.getClass());
@@ -85,6 +93,12 @@ public class Door extends Observable implements Element {
         Logger.enter(this.getClass(), "steppedOut()", player.getClass());
 
         Logger.exit(this.getClass(), "steppedOut()", player.getClass());
+    }
+
+    @Override
+    public void steppedOut(Replicator repliactor)
+    {
+
     }
 
     @Override

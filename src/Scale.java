@@ -34,6 +34,12 @@ public class Scale implements Element
     }
 
     @Override
+    public void interact(Replicator replicator)
+    {
+
+    }
+
+    @Override
     public void interact(Bullet bullet)
     {
         Logger.enter(this.getClass(), "interact()", bullet.getClass());
@@ -94,6 +100,12 @@ public class Scale implements Element
         }
 
         Logger.exit(this.getClass(), "steppedOut()", player.getClass());
+    }
+
+    @Override
+    public void steppedOut(Replicator repliactor)
+    {
+
     }
 
     @Override

@@ -21,6 +21,69 @@ public class Maze extends Observable
     private int mapscountcol = 4;
     private int mapscountrow = 2;
     private WindowFrame mazeframe;
+    private Random rand;
+    private ReplicatorTimer rt = new ReplicatorTimer();
+    private Timer timer = new Timer();
+
+    private class ReplicatorTimer extends TimerTask
+    {
+        private int prevdir = 0;
+
+        @Override
+        public void run()
+        {
+            Replicator replicator = Replicator.getInstance();
+            Direction direction = Direction.NORTH;
+            boolean baddir = true;
+            while(baddir)
+            {
+                System.out.println("baddir");
+                int randdir = rand.nextInt(4);
+                System.out.println(randdir);
+                switch (randdir)
+                {
+                    case 0:
+                        direction = Direction.NORTH;
+                        break;
+                    case 1:
+                        direction = Direction.EAST;
+                        break;
+                    case 2:
+                        direction = Direction.SOUTH;
+                        break;
+                    case 3:
+                        direction = Direction.WEST;
+                        break;
+                    default:
+                        direction = Direction.NORTH;
+                        break;
+                }
+                if(Math.abs(prevdir-randdir) == 2)
+                    baddir = true;
+                else if(replicator.getPosition().getNeighbour(direction).getElement() instanceof Wall)
+                {
+                    if (((Wall) replicator.getPosition().getNeighbour(direction).getElement()).getIsSpecial() == false)
+                        baddir = true;
+                }
+                else
+                {
+                    baddir = false;
+                    prevdir = randdir;
+                }
+            }
+
+            System.out.println("gooddir");
+            replicator.setDirection(direction);
+            if(replicator.getPosition().getNeighbour(direction).getElement() instanceof Gap)
+            {
+                replicator.getPosition().getNeighbour(direction).setElement(null);
+                replicator.die();
+                cancel();
+            }
+            else
+                replicator.step();
+        }
+    }
 
     public class KeyPressListener implements KeyListener
     {
@@ -331,6 +394,8 @@ public class Maze extends Observable
 
         KeyPressListener keyPressListener = new KeyPressListener();
         mazeframe.addKeyListener(keyPressListener);
+
+        rand = new Random();
     }
 
     public void generateZPM() {
@@ -411,6 +476,8 @@ public class Maze extends Observable
         }
 
         Renderer.getInstance().setMaze(maze);
+
+        timer.schedule(rt, 0, 500);
     }
 
     private enum ParsingState {
@@ -1169,19 +1236,6 @@ public class Maze extends Observable
                             c = line.charAt(j);
                             if (Character.isDigit(c)) {
                                 System.out.print(c);
-                                if (Character.getNumericValue(c) == 1) {
-                                    //specWall.setSG(SGBlue.getInstance());
-                                } else if (Character.getNumericValue(c) == 2) {
-                                    //specWall.setSG(SGYellow.getInstance());
-                                } else if (Character.getNumericValue(c) == 3) {
-                                   //specWall.setSG(SGGreen.getInstance());
-                                } else if (Character.getNumericValue(c) == 4) {
-                                    //specWall.setSG(SGRed.getInstance());
-                                } else {
-                                    System.out.println("hibas bemenet " + i + ":" + j);
-                                    state = ParsingState.ERROR;
-                                    break;
-                                }
                                 j++;
                                 c = line.charAt(j);
                                 if (c == ')') {

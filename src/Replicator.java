@@ -20,7 +20,15 @@ public class Replicator extends Observable implements Movable {
     }
 
     @Override
-    public void step() { }
+    public void step() {
+        Floor neighbour = position.getNeighbour(direction);
+        if (position.getElement() != null) position.getElement().steppedOut(this);
+        if(neighbour != null) {
+            neighbour.enter(this);
+        }
+        setChanged();
+        notifyObservers("step");
+    }
 
     @Override
     public void setPosition(Floor position) {
@@ -33,7 +41,12 @@ public class Replicator extends Observable implements Movable {
         return position;
     }
 
-    public void die(){}
+    public void die()
+    {
+        position = null;
+        setChanged();
+        notifyObservers();
+    }
 
     public Direction getDirection()
     {

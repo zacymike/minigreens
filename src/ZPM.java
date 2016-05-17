@@ -16,6 +16,12 @@ public class ZPM extends Observable implements Element {
     }
 
     @Override
+    public void interact(Replicator replicator)
+    {
+
+    }
+
+    @Override
     public void interact(Box box) {
         Logger.enter(this.getClass(), "interact()", box.getClass());
 
@@ -48,6 +54,12 @@ public class ZPM extends Observable implements Element {
         Logger.enter(this.getClass(), "steppedOut()", player.getClass());
 
         Logger.exit(this.getClass(), "steppedOut()", player.getClass());
+    }
+
+    @Override
+    public void steppedOut(Replicator repliactor)
+    {
+
     }
 
     @Override

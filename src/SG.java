@@ -81,6 +81,34 @@ public class SG implements Element
     }
 
     @Override
+    public void interact(Replicator replicator)
+    {
+        switch(type)
+        {
+            case BLUE:
+                if(entry == replicator.getPosition())
+                    if(WormholeYB.getInstance().getSG(Type.YELLOW) != null)
+                        replicator.setPosition(WormholeYB.getInstance().getSG(Type.YELLOW).getEntry());
+                break;
+            case YELLOW:
+                if(entry == replicator.getPosition())
+                    if(WormholeYB.getInstance().getSG(Type.BLUE) != null)
+                        replicator.setPosition(WormholeYB.getInstance().getSG(Type.BLUE).getEntry());
+                break;
+            case RED:
+                if(entry == replicator.getPosition())
+                    if(WormholeRG.getInstance().getSG(Type.GREEN) != null)
+                        replicator.setPosition(WormholeRG.getInstance().getSG(Type.GREEN).getEntry());
+                break;
+            case GREEN:
+                if(entry == replicator.getPosition())
+                    if(WormholeRG.getInstance().getSG(Type.RED) != null)
+                        replicator.setPosition(WormholeRG.getInstance().getSG(Type.RED).getEntry());
+                break;
+        }
+    }
+
+    @Override
     public void interact(Bullet bullet)
     {
 
@@ -100,6 +128,12 @@ public class SG implements Element
 
     @Override
     public void steppedOut(Player player)
+    {
+
+    }
+
+    @Override
+    public void steppedOut(Replicator repliactor)
     {
 
     }

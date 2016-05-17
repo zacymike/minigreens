@@ -52,6 +52,15 @@ public class Floor
         Logger.exit(this.getClass(), "enter()", player.getClass());
     }
 
+    public void enter(Replicator replicator)
+    {
+        if(element == null) {
+            replicator.setPosition(this);
+        } else {
+            element.interact(replicator);
+        }
+    }
+
     public void enter(Bullet bullet)
     {
         Logger.enter(this.getClass(), "enter()", bullet.getClass());
