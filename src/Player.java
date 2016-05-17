@@ -55,6 +55,7 @@ public abstract class Player extends Weight implements Movable
         Logger.enter(this.getClass(), "step()", null);
 
         Floor neighbour = position.getNeighbour(direction);
+        if (position.getElement() != null) position.getElement().steppedOut(this);
         if(neighbour != null) {
             neighbour.enter(this);
         }

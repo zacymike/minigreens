@@ -73,7 +73,7 @@ public class Maze extends Observable
                 case MAPS:
                     if (e.getKeyCode() == KeyEvent.VK_ENTER)
                     {
-                        loadMap(String.format("%d.txt", selectedmap));
+                        loadMap(String.format("maps/%d.txt", selectedmap));
                         gamestate = State.GAME;
                         Renderer.getInstance().setState(gamestate);
                         setChanged();
@@ -1221,17 +1221,19 @@ public class Maze extends Observable
      * visszatérési értéke pedig string tömbben megadott pálya
      */
     public String[] ReadMaze(String path) throws IOException {
-        URL url = Maze.class.getResource(path);
-        File file2 = new File(url.getPath());
-        String fname = file2.toString();
-
         try {
-            FileData file = new FileData();
-            file.ReadFile(fname);
-            String[] aryLines = file.OpenFile();
+            InputStream is = getClass().getResourceAsStream(path);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            String line;
+            List<String> lines = new ArrayList<>();
+            while((line = br.readLine()) != null) {
+                lines.add(line);
+            }
 
-            int i;
-            for ( i=0; i < aryLines.length; i++ ) {
+            String[] aryLines = new String[lines.size()];
+            aryLines = lines.toArray(aryLines);
+
+            for ( int i=0; i < aryLines.length; i++ ) {
                 System.out.println(aryLines[i]) ;
             }
             System.out.println("");

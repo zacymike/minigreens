@@ -37,6 +37,7 @@ public class ZPM extends Observable implements Element {
         Logger.enter(this.getClass(), "pickedUp()", player.getClass());
 
         player.addZPM();
+        player.getPosition().getNeighbour(player.getDirection()).setElement(null);
         notifyObservers();
 
         Logger.exit(this.getClass(), "pickedUp()", player.getClass());

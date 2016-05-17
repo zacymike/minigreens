@@ -23,28 +23,28 @@ public class Renderer extends JPanel implements Observer{
         setPreferredSize(new Dimension(width, height));
 
         textures = new HashMap<>();
-        textures.put("floor", new ImageIcon(getClass().getResource("floor.png")).getImage());
-        textures.put("colonelup", new ImageIcon(getClass().getResource("colonelup.png")).getImage());
-        textures.put("coloneldown", new ImageIcon(getClass().getResource("coloneldown.png")).getImage());
-        textures.put("colonelleft", new ImageIcon(getClass().getResource("colonelleft.png")).getImage());
-        textures.put("colonelright", new ImageIcon(getClass().getResource("colonelright.png")).getImage());
-        textures.put("jaffaup", new ImageIcon(getClass().getResource("jaffaup.png")).getImage());
-        textures.put("jaffadown", new ImageIcon(getClass().getResource("jaffadown.png")).getImage());
-        textures.put("jaffaleft", new ImageIcon(getClass().getResource("jaffaleft.png")).getImage());
-        textures.put("jaffaright", new ImageIcon(getClass().getResource("jaffaright.png")).getImage());
-        textures.put("replicator", new ImageIcon(getClass().getResource("replicator.png")).getImage());
-        textures.put("gap", new ImageIcon(getClass().getResource("gap.png")).getImage());
-        textures.put("dooropen", new ImageIcon(getClass().getResource("dooropen.png")).getImage());
-        textures.put("doorclose", new ImageIcon(getClass().getResource("doorclosed.png")).getImage());
-        textures.put("scale", new ImageIcon(getClass().getResource("scale.png")).getImage());
-        textures.put("wall", new ImageIcon(getClass().getResource("wall.png")).getImage());
-        textures.put("wallspecial", new ImageIcon(getClass().getResource("wallspecial.png")).getImage());
-        textures.put("sgblue", new ImageIcon(getClass().getResource("sgblue.png")).getImage());
-        textures.put("sgyellow", new ImageIcon(getClass().getResource("sgyellow.png")).getImage());
-        textures.put("sgred", new ImageIcon(getClass().getResource("sgred.png")).getImage());
-        textures.put("sggreen", new ImageIcon(getClass().getResource("sggreen.png")).getImage());
-        textures.put("box", new ImageIcon(getClass().getResource("box.png")).getImage());
-        textures.put("zpm", new ImageIcon(getClass().getResource("zpm.png")).getImage());
+        textures.put("floor", new ImageIcon(getClass().getResource("textures/floor.png")).getImage());
+        textures.put("colonelup", new ImageIcon(getClass().getResource("textures/colonelup.png")).getImage());
+        textures.put("coloneldown", new ImageIcon(getClass().getResource("textures/coloneldown.png")).getImage());
+        textures.put("colonelleft", new ImageIcon(getClass().getResource("textures/colonelleft.png")).getImage());
+        textures.put("colonelright", new ImageIcon(getClass().getResource("textures/colonelright.png")).getImage());
+        textures.put("jaffaup", new ImageIcon(getClass().getResource("textures/jaffaup.png")).getImage());
+        textures.put("jaffadown", new ImageIcon(getClass().getResource("textures/jaffadown.png")).getImage());
+        textures.put("jaffaleft", new ImageIcon(getClass().getResource("textures/jaffaleft.png")).getImage());
+        textures.put("jaffaright", new ImageIcon(getClass().getResource("textures/jaffaright.png")).getImage());
+        textures.put("replicator", new ImageIcon(getClass().getResource("textures/replicator.png")).getImage());
+        textures.put("gap", new ImageIcon(getClass().getResource("textures/gap.png")).getImage());
+        textures.put("dooropen", new ImageIcon(getClass().getResource("textures/dooropen.png")).getImage());
+        textures.put("doorclose", new ImageIcon(getClass().getResource("textures/doorclosed.png")).getImage());
+        textures.put("scale", new ImageIcon(getClass().getResource("textures/scale.png")).getImage());
+        textures.put("wall", new ImageIcon(getClass().getResource("textures/wall.png")).getImage());
+        textures.put("wallspecial", new ImageIcon(getClass().getResource("textures/wallspecial.png")).getImage());
+        textures.put("sgblue", new ImageIcon(getClass().getResource("textures/sgblue.png")).getImage());
+        textures.put("sgyellow", new ImageIcon(getClass().getResource("textures/sgyellow.png")).getImage());
+        textures.put("sgred", new ImageIcon(getClass().getResource("textures/sgred.png")).getImage());
+        textures.put("sggreen", new ImageIcon(getClass().getResource("textures/sggreen.png")).getImage());
+        textures.put("box", new ImageIcon(getClass().getResource("textures/box.png")).getImage());
+        textures.put("zpm", new ImageIcon(getClass().getResource("textures/zpm.png")).getImage());
     }
 
     public static Renderer getInstance() {
@@ -214,6 +214,7 @@ public class Renderer extends JPanel implements Observer{
         else if (element instanceof Scale)
         {
             g.drawImage(textures.get("scale"), x, y, null);
+            if(((Scale) element).hasBox()) g.drawImage(textures.get("box"), x, y, null);
         }
         /**
          * Fal és csillagkapu kirajzolása

@@ -123,4 +123,6 @@ public class Scale implements Element
     public int getCurrent_w() {
         return current_w;
     }
+
+    public boolean hasBox() { return boxes.size() > 0; }
 }
