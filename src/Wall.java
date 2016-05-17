@@ -59,11 +59,9 @@ public class Wall extends Observable implements Element
         Logger.enter(this.getClass(), "interact()", bullet.getClass());
 
         if(isspecial) {
-            System.out.println("CreateSG");
             createSG(bullet);
         }
         else {
-            System.out.println("destroy bullet");
             bullet.destroy();
         }
 
