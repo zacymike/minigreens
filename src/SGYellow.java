@@ -3,7 +3,7 @@ public class SGYellow extends SG
 {
     private static SGYellow instance = new SGYellow();
 
-    private SGYellow() { super(); }
+    private SGYellow() { super(Type.YELLOW); }
 
     public static SGYellow getInstance()
     {

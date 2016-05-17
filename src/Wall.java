@@ -26,7 +26,6 @@ public class Wall extends Observable implements Element
     {
         if(isspecial) {
             this.sg = sg;
-            this.sg.setWall(this);
         }
     }
 
@@ -60,9 +59,11 @@ public class Wall extends Observable implements Element
         Logger.enter(this.getClass(), "interact()", bullet.getClass());
 
         if(isspecial) {
+            System.out.println("CreateSG");
             createSG(bullet);
         }
         else {
+            System.out.println("destroy bullet");
             bullet.destroy();
         }
 
@@ -71,44 +72,61 @@ public class Wall extends Observable implements Element
 
     private void createSG(Bullet bullet)
     {
-        Floor bulletpos = bullet.getPosition();
-        SGYellow yellowsg = SGYellow.getInstance(); // ???
-
-        // Ha ezen a falon van SG akkor azt kitöröljük
+        //Ha már van csillagkapu a falon azt kitörljük a megfelelő féregjáratból
         if(sg != null)
         {
-            sg.setEntry(null);
+            Type prevtype = sg.getType();
+            switch(prevtype)
+            {
+                case BLUE:
+                    WormholeYB.getInstance().setSG(Type.BLUE, null);
+                    break;
+                case YELLOW:
+                    WormholeYB.getInstance().setSG(Type.YELLOW, null);
+                    break;
+                case RED:
+                    WormholeRG.getInstance().setSG(Type.RED, null);
+                    break;
+                case GREEN:
+                    WormholeRG.getInstance().setSG(Type.GREEN, null);
+                    break;
+            }
         }
 
-        switch (bullet.getType())
+        // Új csillagkapu inicializálása
+        Type type = bullet.getType();
+        sg = new SG(type);
+        sg.setEntry(bullet.getPosition());
+        sg.setWall(this);
+
+        // Ha van már ilyen típusú csillagkapu a pályán azt letörljük a falról is,
+        // és az új csillagkaput beállítjuk a megfelelő féregjárathoz.
+        switch(type)
         {
             case BLUE:
-                // Ha van más falon már kék SG akkor azt ki töröljük onnan
-                if (SGBlue.getInstance().getEntry() != null)
-                {
-                    SGBlue.getInstance().getWall().setSG(null);
-                }
-
-                // Létrehozunk ezen a falon egy kék SGt
-                sg = SGBlue.getInstance();
-                sg.setEntry(bulletpos);
-                sg.setWall(this);
-                notifyObservers();
+                if(WormholeYB.getInstance().getSG(Type.BLUE) != null)
+                    WormholeYB.getInstance().getSG(Type.BLUE).getWall().setSG(null);
+                WormholeYB.getInstance().setSG(Type.BLUE, sg);
                 break;
             case YELLOW:
-                // Ha van más falon már sárga SG akkor azt ki töröljük onnan
-                if (SGYellow.getInstance().getEntry() != null)
-                {
-                    SGBlue.getInstance().getWall().setSG(null);
-                }
-
-                // Létrehozunk ezen a falon egy sarga SGt
-                sg = SGYellow.getInstance();
-                sg.setEntry(bulletpos);
-                sg.setWall(this);
-                notifyObservers();
+                if(WormholeYB.getInstance().getSG(Type.YELLOW) != null)
+                    WormholeYB.getInstance().getSG(Type.YELLOW).getWall().setSG(null);
+                WormholeYB.getInstance().setSG(Type.YELLOW, sg);
+                break;
+            case RED:
+                if(WormholeRG.getInstance().getSG(Type.RED) != null)
+                    WormholeRG.getInstance().getSG(Type.RED).getWall().setSG(null);
+                WormholeRG.getInstance().setSG(Type.RED, sg);
+                break;
+            case GREEN:
+                if(WormholeRG.getInstance().getSG(Type.GREEN) != null)
+                    WormholeRG.getInstance().getSG(Type.GREEN).getWall().setSG(null);
+                WormholeRG.getInstance().setSG(Type.GREEN, sg);
                 break;
         }
+
+        // A lövedéket megsemmisítjük.
+        bullet.destroy();
     }
 
     @Override

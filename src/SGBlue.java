@@ -3,7 +3,7 @@ public class SGBlue extends SG
 {
     private static SGBlue instance = new SGBlue();
 
-    private SGBlue() { super(); }
+    private SGBlue() { super(Type.BLUE); }
 
     public static SGBlue getInstance()
     {

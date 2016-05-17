@@ -1,16 +1,19 @@
 /**
  * Created by Judit on 2016. 04. 23..
  */
-public class WormholeRG {
+public class WormholeRG extends Wormhole{
     private static WormholeRG instance = new WormholeRG();
 
-    private WormholeRG() { super();}
+    private WormholeRG()
+    {
+        super();
+        setSG(Type.RED, null);
+        setSG(Type.GREEN, null);
+    }
 
     public static WormholeRG getInstance()
     {
-        Logger.enter(WormholeRG.class, "getInstance()", null);
-        Logger.exit(WormholeRG.class, "getInstance()", null);
-
+        if (instance == null) instance = new WormholeRG();
         return instance;
     }
 }

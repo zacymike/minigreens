@@ -214,6 +214,7 @@ public class Renderer extends JPanel implements Observer{
         else if (element instanceof Scale)
         {
             g.drawImage(textures.get("scale"), x, y, null);
+            //Ha van doboz a mérlegen, annak kirajzolása
             if(((Scale) element).hasBox()) g.drawImage(textures.get("box"), x, y, null);
         }
         /**

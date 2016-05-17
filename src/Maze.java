@@ -1170,13 +1170,13 @@ public class Maze extends Observable
                             if (Character.isDigit(c)) {
                                 System.out.print(c);
                                 if (Character.getNumericValue(c) == 1) {
-                                    specWall.setSG(SGBlue.getInstance());
+                                    //specWall.setSG(SGBlue.getInstance());
                                 } else if (Character.getNumericValue(c) == 2) {
-                                    specWall.setSG(SGYellow.getInstance());
+                                    //specWall.setSG(SGYellow.getInstance());
                                 } else if (Character.getNumericValue(c) == 3) {
-                                    specWall.setSG(SGGreen.getInstance());
+                                   //specWall.setSG(SGGreen.getInstance());
                                 } else if (Character.getNumericValue(c) == 4) {
-                                    specWall.setSG(SGRed.getInstance());
+                                    //specWall.setSG(SGRed.getInstance());
                                 } else {
                                     System.out.println("hibas bemenet " + i + ":" + j);
                                     state = ParsingState.ERROR;

@@ -16,6 +16,7 @@ public class WindowFrame extends JFrame
         setSize(new Dimension(630, 630));
         setResizable(false);
         setTitle("Minigreens");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(panel);
         pack();
     }

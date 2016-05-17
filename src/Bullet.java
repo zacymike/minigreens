@@ -13,6 +13,7 @@ public class Bullet extends Observable implements Movable
         direction = dir;
         type = t;
         addObserver(Renderer.getInstance());
+        alive = true;
     }
 
     @Override

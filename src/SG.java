@@ -5,7 +5,11 @@ public class SG implements Element
     private Wall wall;
     private Type type;
 
-    public SG() { entry = null; }
+    public SG(Type type)
+    {
+        this.type = type;
+        entry = null;
+    }
 
     public Floor getEntry() {
         Logger.enter(this.getClass(), "getEntry()", null);
@@ -51,7 +55,29 @@ public class SG implements Element
     @Override
     public void interact(Player player)
     {
-
+        switch(type)
+        {
+            case BLUE:
+                if(entry == player.getPosition())
+                    if(WormholeYB.getInstance().getSG(Type.YELLOW) != null)
+                        player.setPosition(WormholeYB.getInstance().getSG(Type.YELLOW).getEntry());
+                break;
+            case YELLOW:
+                if(entry == player.getPosition())
+                    if(WormholeYB.getInstance().getSG(Type.BLUE) != null)
+                        player.setPosition(WormholeYB.getInstance().getSG(Type.BLUE).getEntry());
+                break;
+            case RED:
+                if(entry == player.getPosition())
+                    if(WormholeRG.getInstance().getSG(Type.GREEN) != null)
+                        player.setPosition(WormholeRG.getInstance().getSG(Type.GREEN).getEntry());
+                break;
+            case GREEN:
+                if(entry == player.getPosition())
+                    if(WormholeRG.getInstance().getSG(Type.RED) != null)
+                        player.setPosition(WormholeRG.getInstance().getSG(Type.RED).getEntry());
+                break;
+        }
     }
 
     @Override
