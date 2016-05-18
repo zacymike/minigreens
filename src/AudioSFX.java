@@ -13,7 +13,6 @@ public class AudioSFX
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    System.out.println("sounds/" + name + ".wav");
                     Clip clip = AudioSystem.getClip();
                     AudioInputStream inputStream = AudioSystem.getAudioInputStream(
                             new BufferedInputStream(getClass().getResourceAsStream("/sounds/" + name + ".wav")));

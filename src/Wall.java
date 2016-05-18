@@ -43,14 +43,10 @@ public class Wall extends Observable implements Element
     @Override
     public void interact(Player player)
     {
-        Logger.enter(this.getClass(), "interact()", player.getClass());
-
         if(isspecial && sg != null)
         {
             sg.interact(player);
         }
-
-        Logger.exit(this.getClass(), "interact()", player.getClass());
     }
 
     @Override
@@ -65,16 +61,12 @@ public class Wall extends Observable implements Element
     @Override
     public void interact(Bullet bullet)
     {
-        Logger.enter(this.getClass(), "interact()", bullet.getClass());
-
         if(isspecial) {
             createSG(bullet);
         }
         else {
             bullet.destroy();
         }
-
-        Logger.exit(this.getClass(), "interact()", bullet.getClass());
     }
 
     private void createSG(Bullet bullet)
@@ -137,40 +129,17 @@ public class Wall extends Observable implements Element
     }
 
     @Override
-    public void interact(Box box)
-    {
-        Logger.enter(this.getClass(), "interact()", box.getClass());
-
-        Logger.exit(this.getClass(), "interact()", box.getClass());
-    }
+    public void interact(Box box) {}
 
     @Override
-    public void pickedUp(Player player)
-    {
-        Logger.enter(this.getClass(), "pickedUp()", player.getClass());
-
-        Logger.exit(this.getClass(), "pickedUp()", player.getClass());
-    }
+    public void pickedUp(Player player) {}
 
     @Override
-    public void steppedOut(Player player)
-    {
-        Logger.enter(this.getClass(), "steppedOut()", player.getClass());
-
-        Logger.exit(this.getClass(), "steppedOut()", player.getClass());
-    }
+    public void steppedOut(Player player) {}
 
     @Override
-    public void steppedOut(Replicator repliactor)
-    {
-
-    }
+    public void steppedOut(Replicator repliactor) {}
 
     @Override
-    public void steppedOut(Box box)
-    {
-        Logger.enter(this.getClass(), "steppedOut()", box.getClass());
-
-        Logger.exit(this.getClass(), "steppedOut()", box.getClass());
-    }
+    public void steppedOut(Box box) {}
 }

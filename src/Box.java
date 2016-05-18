@@ -15,77 +15,36 @@ public class Box extends Weight implements Element
     }
 
     @Override
-    public void interact(Player player)
-    {
-        Logger.enter(this.getClass(), "interact()", player.getClass());
-
-        Logger.exit(this.getClass(), "interact()", player.getClass());
-    }
+    public void interact(Player player) {}
 
     @Override
-    public void interact(Replicator replicator)
-    {
-
-    }
+    public void interact(Replicator replicator) {}
 
     @Override
-    public void interact(Bullet bullet)
-    {
-        Logger.enter(this.getClass(), "interact()", bullet.getClass());
-
-        bullet.destroy();
-
-        Logger.exit(this.getClass(), "interact()", bullet.getClass());
-    }
+    public void interact(Bullet bullet) {bullet.destroy();}
 
     @Override
-    public void interact(Box box)
-    {
-        Logger.enter(this.getClass(), "interact()", box.getClass());
-
-        Logger.exit(this.getClass(), "interact()", box.getClass());
-    }
+    public void interact(Box box) {}
 
     @Override
     public void pickedUp(Player player)
     {
-        Logger.enter(this.getClass(), "pickedUp()", player.getClass());
-
         player.setBox(this);
         player.getPosition().getNeighbour(player.getDirection()).setElement(null);
-
-        Logger.exit(this.getClass(), "pickedUp()", player.getClass());
     }
 
     @Override
-    public void steppedOut(Player player)
-    {
-        Logger.enter(this.getClass(), "steppedOut()", player.getClass());
-
-        Logger.exit(this.getClass(), "steppedOut()", player.getClass());
-    }
+    public void steppedOut(Player player) {}
 
     @Override
-    public void steppedOut(Replicator repliactor)
-    {
-
-    }
+    public void steppedOut(Replicator repliactor) {}
 
     @Override
-    public void steppedOut(Box box)
-    {
-        Logger.enter(this.getClass(), "steppedOut()", box.getClass());
-
-        Logger.exit(this.getClass(), "steppedOut()", box.getClass());
-    }
+    public void steppedOut(Box box) {}
 
     public void destroy()
     {
-        Logger.enter(this.getClass(), "destroy()", null);
-
         alive = false;
         notifyObservers();
-
-        Logger.exit(this.getClass(), "destroy()", null);
     }
 }

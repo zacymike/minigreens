@@ -22,8 +22,8 @@ public class Maze extends Observable
     private int mapscountrow = 2;
     private WindowFrame mazeframe;
     private Random rand;
-    private ReplicatorTimer rt = new ReplicatorTimer();
-    private Timer timer = new Timer();
+    private ReplicatorTimer rt;
+    private Timer timer;
 
     private class ReplicatorTimer extends TimerTask
     {
@@ -37,9 +37,7 @@ public class Maze extends Observable
             boolean baddir = true;
             while(baddir)
             {
-                System.out.println("baddir");
                 int randdir = rand.nextInt(4);
-                System.out.println(randdir);
                 switch (randdir)
                 {
                     case 0:
@@ -72,13 +70,13 @@ public class Maze extends Observable
                 }
             }
 
-            System.out.println("gooddir");
             replicator.setDirection(direction);
             if(replicator.getPosition().getNeighbour(direction).getElement() instanceof Gap)
             {
+                cancel();
+                timer.cancel();
                 replicator.getPosition().getNeighbour(direction).setElement(null);
                 replicator.die();
-                cancel();
             }
             else
                 replicator.step();
@@ -199,6 +197,8 @@ public class Maze extends Observable
                      */
                     if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
                     {
+                        rt.cancel();
+                        timer.cancel();
                         gamestate = State.MENU;
                         Renderer.getInstance().setState(gamestate);
                         setChanged();
@@ -476,6 +476,11 @@ public class Maze extends Observable
         }
 
         Renderer.getInstance().setMaze(maze);
+
+
+
+        rt = new ReplicatorTimer();
+        timer = new Timer();
 
         timer.schedule(rt, 0, 500);
     }
@@ -1564,26 +1569,5 @@ public class Maze extends Observable
         }
 
         return outmap;
-    }
-
-    /**
-     * Ez a függvény a képernyő/konzol törtlését végzi
-     */
-    public void clear()
-    {
-        try
-        {
-            if (System.getProperty("os.name").contains("Windows"))
-            {
-                Runtime.getRuntime().exec("cls");
-            } else
-            {
-                System.out.print("\033[H\033[2J");
-            }
-        }
-        catch (final Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
     }
 }
